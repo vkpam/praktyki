@@ -7,7 +7,7 @@ public class Customers {
     private static Scanner reading = new Scanner(System.in);
 
     public static void showMenu() {
-        int answer = shownMenuAndGetAnswer();
+        int answer = showMenuAndGetAnswer();
        do {
            switch (answer) {
                case 1:
@@ -19,9 +19,10 @@ public class Customers {
                default:
                    System.out.println("Wrong answer, please type again");
            }
-           answer = shownMenuAndGetAnswer();
+           answer = showMenuAndGetAnswer();
        } while(answer!=0);
     }
+
     public static void add() {
         Scanner reading = new Scanner(System.in);
         String name;
@@ -60,13 +61,11 @@ public class Customers {
             outputArray[0][4] = " NIP ";
             outputArray[0][5] = " PHONE ";
 
-            String query = ("SELECT * FROM customers");
+            String query = "SELECT ROWID,* FROM customers";
             ResultSet result = Database.select(query);
             int i = 1;
             while(result.next()) {
-                // TODO
-                //outputArray[i][0] = result.getString("ROWID");
-                outputArray[i][0] = " " + Integer.toString(i) + " ";
+                outputArray[i][0] = " " + result.getString("ROWID") + " ";
                 outputArray[i][1] = " " + result.getString("NAME") + " ";
                 outputArray[i][2] = " " + result.getString("ADDRESS") + " ";
                 outputArray[i][3] = " " + result.getString("ADDRESS2") + " ";
@@ -80,16 +79,16 @@ public class Customers {
         } catch(SQLException e) {
             System.out.println("ERROR: Couldn't fetch data from the database: " + e.toString());
         }
-
     }
-    private static int shownMenuAndGetAnswer() {
-        System.out.println("\nCUSTOMERS MENU\n 1.Add customer\n 2.Show customers\n 0.Exit");
+
+    private static int showMenuAndGetAnswer() {
+        System.out.println("\nCUSTOMERS MENU\n 1.Add customer\n 2.Show customers\n 0.Main menu");
         System.out.print("Choose an option: ");
         return reading.nextInt();
     }
 
     private static int getCustomersCount() throws SQLException {
-        String query = ("SELECT count(*) FROM customers");
+        String query = "SELECT count(*) FROM customers";
         ResultSet result = Database.select(query);
         result.next();
         return result.getInt(1);

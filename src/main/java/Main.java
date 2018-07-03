@@ -10,7 +10,7 @@ public class Main {
 
         Database.connect();
         System.out.println("Company account v1.0");
-        int answer = shownMenuAndGetAnswer();
+        int answer = showMenuAndGetAnswer();
 
          do{
              switch (answer) {
@@ -20,17 +20,16 @@ public class Main {
                 default:
                     System.out.println("Wrong answer, please type again");
             }
-             answer = shownMenuAndGetAnswer();
+             answer = showMenuAndGetAnswer();
         }while(answer!=0);
 
          Database.disconnect();
     }
 
-    private static int shownMenuAndGetAnswer() {
-        System.out.println("\nMENU\n 1.Customer\n 2.Invoices\n 3.Taxes\n 0.Exit");
+    private static int showMenuAndGetAnswer() {
+        System.out.println("\nMENU\n 1.Customers\n 2.Invoices\n 3.Taxes\n 0.Exit");
         System.out.print("Choose an option: ");
         return reading.nextInt();
     }
-
 
 }
