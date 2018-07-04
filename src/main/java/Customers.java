@@ -1,26 +1,28 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Customers {
 
-    private static Scanner reading = new Scanner(System.in);
-
     public static void showMenu() {
         int answer = showMenuAndGetAnswer();
-       do {
-           switch (answer) {
-               case 1:
-                   add();
-                   break;
-               case 2:
-                   show();
-                   break;
-               default:
-                   System.out.println("Wrong answer, please type again");
-           }
-           answer = showMenuAndGetAnswer();
-       } while(answer!=0);
+        while (answer != 0) {
+            switch (answer) {
+                case 1:
+                    add();
+                    break;
+                case 2:
+                    show();
+                    break;
+                case 3:
+                    delete();
+                    break;
+                default:
+                    System.out.println("Wrong answer, please type again");
+            }
+            answer = showMenuAndGetAnswer();
+        }
     }
 
     public static void add() {
@@ -34,26 +36,28 @@ public class Customers {
         String address2;
         System.out.print("Enter Address (line 2): ");
         address2 = reading.nextLine();
-        long nip;
-        System.out.print("Enter NIP: ");
-        nip = reading.nextLong();
-        long phone;
-        System.out.print("Enter Phone: ");
-        phone = reading.nextLong();
-        String query = "INSERT INTO customers VALUES('"
-                + name + "','" + address + "','" + address2 + "'," + nip + "," + phone + ");";
         try {
+            long nip;
+            System.out.print("Enter NIP: ");
+            nip = reading.nextLong();
+            long phone;
+            System.out.print("Enter Phone: ");
+            phone = reading.nextLong();
+            String query = "INSERT INTO customers VALUES('"
+                    + name + "','" + address + "','" + address2 + "'," + nip + "," + phone + ");";
+
             Database.sendQueryToDB(query);
             System.out.println("Customer added\n");
-        } catch(SQLException e) {
+        } catch (SQLException | InputMismatchException e) {
             System.out.println("ERROR: Couldn't add customer: " + e.toString());
         }
     }
 
     public static void show() {
         try {
+
             int customersCount = getCustomersCount();
-            String[][] outputArray = new String[customersCount+1][6];
+            String[][] outputArray = new String[customersCount + 1][6];
             outputArray[0][0] = " Lp. ";
             outputArray[0][1] = " NAME ";
             outputArray[0][2] = " ADDRESS ";
@@ -61,10 +65,12 @@ public class Customers {
             outputArray[0][4] = " NIP ";
             outputArray[0][5] = " PHONE ";
 
+
             String query = "SELECT ROWID,* FROM customers";
             ResultSet result = Database.select(query);
+
             int i = 1;
-            while(result.next()) {
+            while (result.next()) {
                 outputArray[i][0] = " " + result.getString("ROWID") + " ";
                 outputArray[i][1] = " " + result.getString("NAME") + " ";
                 outputArray[i][2] = " " + result.getString("ADDRESS") + " ";
@@ -74,17 +80,35 @@ public class Customers {
                 ++i;
             }
 
-            printOutput(outputArray);
+            Printer.printOutput(outputArray);
 
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             System.out.println("ERROR: Couldn't fetch data from the database: " + e.toString());
         }
     }
 
+    public static void delete() {
+        show();
+        System.out.print("Type customer number to delete: ");
+        try {
+            Scanner reading = new Scanner(System.in);
+            int answer = reading.nextInt();
+            String query = "DELETE FROM customers WHERE ROWID = " + answer + ";";
+            Database.sendQueryToDB(query);
+        } catch (SQLException | InputMismatchException e) {
+            System.out.println("Couldn't delete customer: " + e.toString());
+        }
+    }
+
     private static int showMenuAndGetAnswer() {
-        System.out.println("\nCUSTOMERS MENU\n 1.Add customer\n 2.Show customers\n 0.Main menu");
+        Scanner reading = new Scanner(System.in);
+        System.out.println("\nCUSTOMERS MENU\n 1.Add customer\n 2.Show customers\n 3.Delete customer\n 0.Main menu");
         System.out.print("Choose an option: ");
-        return reading.nextInt();
+        try {
+            return reading.nextInt();
+        } catch (InputMismatchException e) {
+            return -1;
+        }
     }
 
     private static int getCustomersCount() throws SQLException {
@@ -92,31 +116,5 @@ public class Customers {
         ResultSet result = Database.select(query);
         result.next();
         return result.getInt(1);
-    }
-
-    private static void printOutput(String[][] output) {
-        int[] lengths = new int[output[0].length];
-        for(int i = 0; i<lengths.length; ++i) {
-            lengths[i] = getMaxLengthInColumn(output, i);
-        }
-        String format = "";
-        for(int i = 0; i<lengths.length; ++i) {
-            format += "|%" + lengths[i] + "s";
-        }
-        format += "|%n";
-        for(int i = 0; i<output.length; ++i) {
-            System.out.format(format, output[i]);
-        }
-    }
-
-    private static int getMaxLengthInColumn(String[][] array, int columnIndex) {
-        int max = array[0][columnIndex].length();
-        for(int i = 1; i < array.length; ++i) {
-            int currentLength = array[i][columnIndex].length();
-            if( currentLength > max) {
-                max = currentLength;
-            }
-        }
-        return max;
     }
 }

@@ -24,7 +24,7 @@ public class Database {
             if (conn != null) {
                 conn.close();
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             System.out.println("ERROR: Error while disconnecting the database: " + e.toString());
         }
     }
