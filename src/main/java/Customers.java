@@ -43,11 +43,11 @@ public class Customers {
             long phone;
             System.out.print("Enter Phone: ");
             phone = reading.nextLong();
-            String query = "INSERT INTO customers VALUES('"
+            String query = "INSERT INTO customers VALUES(null, '"
                     + name + "','" + address + "','" + address2 + "'," + nip + "," + phone + ");";
 
             Database.sendQueryToDB(query);
-            System.out.println("Customer added\n");
+            System.out.println("Customer added");
         } catch (SQLException | InputMismatchException e) {
             System.out.println("ERROR: Couldn't add customer: " + e.toString());
         }
@@ -58,7 +58,7 @@ public class Customers {
 
             int customersCount = getCustomersCount();
             String[][] outputArray = new String[customersCount + 1][6];
-            outputArray[0][0] = " Lp. ";
+            outputArray[0][0] = " ID ";
             outputArray[0][1] = " NAME ";
             outputArray[0][2] = " ADDRESS ";
             outputArray[0][3] = " ADDRESS cont. ";
@@ -66,12 +66,12 @@ public class Customers {
             outputArray[0][5] = " PHONE ";
 
 
-            String query = "SELECT ROWID,* FROM customers";
+            String query = "SELECT * FROM customers";
             ResultSet result = Database.select(query);
 
             int i = 1;
             while (result.next()) {
-                outputArray[i][0] = " " + result.getString("ROWID") + " ";
+                outputArray[i][0] = " " + result.getString("CUSTOMERID") + " ";
                 outputArray[i][1] = " " + result.getString("NAME") + " ";
                 outputArray[i][2] = " " + result.getString("ADDRESS") + " ";
                 outputArray[i][3] = " " + result.getString("ADDRESS2") + " ";
@@ -89,12 +89,13 @@ public class Customers {
 
     public static void delete() {
         show();
-        System.out.print("Type customer number to delete: ");
+        System.out.print("Type customer ID to delete: ");
         try {
             Scanner reading = new Scanner(System.in);
             int answer = reading.nextInt();
-            String query = "DELETE FROM customers WHERE ROWID = " + answer + ";";
+            String query = "DELETE FROM customers WHERE CUSTOMERID = " + answer + ";";
             Database.sendQueryToDB(query);
+            System.out.println("Customer deleted");
         } catch (SQLException | InputMismatchException e) {
             System.out.println("Couldn't delete customer: " + e.toString());
         }
