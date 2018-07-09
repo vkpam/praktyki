@@ -1,3 +1,4 @@
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -13,6 +14,9 @@ public class Invoices {
                 case 1:
                     add();
                     break;
+                case 2:
+                    showAll();
+                    break;
                 default:
                     System.out.println("Wrong answer, please type again");
             }
@@ -22,7 +26,7 @@ public class Invoices {
 
     private static int showMenuAndGetAnswer() {
         Scanner reading = new Scanner(System.in);
-        System.out.println("\nINVOICES MENU\n 1.Add invoice\n 0.Main menu");
+        System.out.println("\nINVOICES MENU\n 1.Add invoice\n 2.Show all invoices\n 0.Main menu");
         System.out.print("Choose an option: ");
         try {
             return reading.nextInt();
@@ -32,7 +36,7 @@ public class Invoices {
     }
 
     public static void add() {
-        Customers.show();
+        Customers.showAll();
         System.out.print("Type customerID: ");
         Scanner reading = new Scanner(System.in);
         try {
@@ -128,5 +132,52 @@ public class Invoices {
         }
 
     }
-    
+
+    public static void showAll() {
+
+        String query = "SELECT * FROM invoices;";
+
+        try {
+            ResultSet result = Database.select(query);
+            while (result.next()) {
+                int invoiceId = result.getInt("INVOICEID");
+                System.out.println("\n INVOICE ID " + invoiceId + "\t" +
+                    " NUMBER " + result.getString("NUMBER"));
+                Customers.show(result.getInt("CUSTOMERID"));
+                System.out.println(" CREATION DATE " + result.getString("CREATIONDATE") + "\t" +
+                    " SELL DATE " + result.getString("SELLDATE") + "\t" +
+                    " PAYMENT DATE " + result.getString("PAYMENTDATE"));
+                System.out.println(" PAYMENT " + result.getString("PAYMENT") + "\t" +
+                        " CURRENCY " + result.getString("CURRENCY"));
+                System.out.println(" BANKNAME " + result.getString("BANKNAME") + "\t" +
+                    " ACCOUNT NUMBER " + result.getString("ACCOUNTNR"));
+                System.out.println(" COMMENTS " + result.getString("COMMENTS"));
+
+                showProducts(invoiceId);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("ERROR: Couldn't fetch data from the database: " + e.toString());
+        }
+    }
+
+    public static void showProducts(int invoiceid) {
+        /*String query = "SELECT * FROM customers WHERE customerid=" + customerid;
+
+        try {
+            ResultSet result = Database.select(query);
+            result.next();
+            System.out.println(" PRODUCT ID " + result.getInt("PRODUCTID") + " ");
+            System.out.println(" INVOICE ID " + result.getString("INVOICEID") + " ");
+            System.out.println(" NAME " + result.getString("NAME") + " ");
+            System.out.println(" COUNT " + result.getString("COUNT") + " ");
+            System.out.println(" UNIT " + result.getString("UNIT") + " ");
+            System.out.println(" NETTO " + result.getString("NETTO") + " ");
+            System.out.println(" VAT " + result.getString("PHONE") + " ");
+        } catch (
+                SQLException e) {
+            System.out.println("ERROR: Couldn't fetch data from the database: " + e.toString());
+        }*/
+    }
 }
+

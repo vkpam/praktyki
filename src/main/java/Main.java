@@ -17,6 +17,7 @@ public class Main {
                     break;
                 case 2:
                     Invoices.showMenu();
+                    break;
                 default:
                     System.out.println("Wrong answer, please type again");
             }

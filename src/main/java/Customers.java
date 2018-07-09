@@ -13,7 +13,7 @@ public class Customers {
                     add();
                     break;
                 case 2:
-                    show();
+                    showAll();
                     break;
                 case 3:
                     delete();
@@ -53,7 +53,7 @@ public class Customers {
         }
     }
 
-    public static void show() {
+    public static void showAll() {
         try {
 
             int customersCount = getCustomersCount();
@@ -66,7 +66,7 @@ public class Customers {
             outputArray[0][5] = " PHONE ";
 
 
-            String query = "SELECT * FROM customers";
+            String query = "SELECT * FROM customers;";
             ResultSet result = Database.select(query);
 
             int i = 1;
@@ -87,8 +87,25 @@ public class Customers {
         }
     }
 
+    public static void show(int customerid) {
+        String query = "SELECT * FROM customers WHERE customerid=" + customerid + ";";
+
+        try {
+            ResultSet result = Database.select(query);
+            result.next();
+            System.out.println(" CUSTOMER ID " + result.getInt("CUSTOMERID") + "\t" +
+                " NAME " + result.getString("NAME") + " ");
+            System.out.println(" ADDRESS " + result.getString("ADDRESS") + ", " +
+                result.getString("ADDRESS2"));
+            System.out.println(" NIP " + result.getString("NIP"));
+            System.out.println(" PHONE " + result.getString("PHONE"));
+        } catch (SQLException e) {
+            System.out.println("ERROR: Couldn't fetch data from the database: " + e.toString());
+        }
+    }
+
     public static void delete() {
-        show();
+        showAll();
         System.out.print("Type customer ID to delete: ");
         try {
             Scanner reading = new Scanner(System.in);
