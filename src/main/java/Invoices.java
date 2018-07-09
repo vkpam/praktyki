@@ -17,6 +17,9 @@ public class Invoices {
                 case 2:
                     showAll();
                     break;
+                case 3:
+                    deleteProductsFromInvoiceAndInvoice();
+                    break;
                 default:
                     System.out.println("Wrong answer, please type again");
             }
@@ -26,7 +29,7 @@ public class Invoices {
 
     private static int showMenuAndGetAnswer() {
         Scanner reading = new Scanner(System.in);
-        System.out.println("\nINVOICES MENU\n 1.Add invoice\n 2.Show all invoices\n 0.Main menu");
+        System.out.println("\nINVOICES MENU\n 1.Add invoice\n 2.Show all invoices\n 3.Delete invoices\n 0.Main menu");
         System.out.print("Choose an option: ");
         try {
             return reading.nextInt();
@@ -211,6 +214,21 @@ public class Invoices {
         ResultSet result = Database.select(query);
         result.next();
         return result.getInt(1);
+    }
+    public static void deleteProductsFromInvoiceAndInvoice() {
+        showAll();
+        System.out.print("Type number (not ID) to delete: ");
+        try {
+            Scanner reading = new Scanner(System.in);
+            String invoiceNumber = reading.nextLine();
+            String query = "DELETE FROM products WHERE invoicenumber = '" + invoiceNumber + "';";
+            Database.sendQueryToDB(query);
+            query = "DELETE FROM invoices WHERE number = " + invoiceNumber + ";";
+            Database.sendQueryToDB(query);
+            System.out.println("Invoice number " + invoiceNumber + " deleted");
+        } catch (SQLException | InputMismatchException e) {
+            System.out.println("Couldn't delete invoice: " + e.toString());
+        }
     }
 }
 
