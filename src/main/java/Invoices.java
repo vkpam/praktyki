@@ -140,20 +140,20 @@ public class Invoices {
         try {
             ResultSet result = Database.select(query);
             while (result.next()) {
-                int invoiceId = result.getInt("INVOICEID");
-                System.out.println("\n INVOICE ID " + invoiceId + "\t" +
-                    " NUMBER " + result.getString("NUMBER"));
+                String invoiceNumber = result.getString("NUMBER");
+                System.out.println("\n INVOICE ID " + result.getInt("INVOICEID") + "\t" +
+                        " NUMBER " + invoiceNumber);
                 Customers.show(result.getInt("CUSTOMERID"));
                 System.out.println(" CREATION DATE " + result.getString("CREATIONDATE") + "\t" +
-                    " SELL DATE " + result.getString("SELLDATE") + "\t" +
-                    " PAYMENT DATE " + result.getString("PAYMENTDATE"));
+                        " SELL DATE " + result.getString("SELLDATE") + "\t" +
+                        " PAYMENT DATE " + result.getString("PAYMENTDATE"));
                 System.out.println(" PAYMENT " + result.getString("PAYMENT") + "\t" +
                         " CURRENCY " + result.getString("CURRENCY"));
                 System.out.println(" BANKNAME " + result.getString("BANKNAME") + "\t" +
-                    " ACCOUNT NUMBER " + result.getString("ACCOUNTNR"));
+                        " ACCOUNT NUMBER " + result.getString("ACCOUNTNR"));
                 System.out.println(" COMMENTS " + result.getString("COMMENTS"));
 
-                showProducts(invoiceId);
+                showProducts(invoiceNumber);
             }
 
         } catch (SQLException e) {
@@ -161,23 +161,56 @@ public class Invoices {
         }
     }
 
-    public static void showProducts(int invoiceid) {
-        /*String query = "SELECT * FROM customers WHERE customerid=" + customerid;
-
+    public static void showProducts(String invoiceNumber) {
         try {
+
+            int productsCount = getProductsCount(invoiceNumber);
+            String[][] outputArray = new String[productsCount + 1][9];
+            outputArray[0][0] = " ON. ";
+            outputArray[0][1] = " NAME ";
+            outputArray[0][2] = " COUNT ";  //10
+            outputArray[0][3] = " UNIT ";
+            outputArray[0][4] = " NETTO PRICE ";  //100
+            outputArray[0][5] = " NETTO ";  //10*100
+            outputArray[0][6] = " VAT RATE ";    //23%
+            outputArray[0][7] = " VAT VALUE ";    //23%*10*100
+            outputArray[0][8] = " BRUTTO "; //1230 <- obliczyc
+
+            String query = "SELECT * FROM products WHERE invoicenumber='" + invoiceNumber + "';";
             ResultSet result = Database.select(query);
-            result.next();
-            System.out.println(" PRODUCT ID " + result.getInt("PRODUCTID") + " ");
-            System.out.println(" INVOICE ID " + result.getString("INVOICEID") + " ");
-            System.out.println(" NAME " + result.getString("NAME") + " ");
-            System.out.println(" COUNT " + result.getString("COUNT") + " ");
-            System.out.println(" UNIT " + result.getString("UNIT") + " ");
-            System.out.println(" NETTO " + result.getString("NETTO") + " ");
-            System.out.println(" VAT " + result.getString("PHONE") + " ");
-        } catch (
-                SQLException e) {
+
+            int i = 1;
+            while (result.next()) {
+                outputArray[i][0] = " " + i + " ";
+                outputArray[i][1] = " " + result.getString("NAME") + " ";
+                int count = result.getInt("COUNT");
+                outputArray[i][2] = " " + count + " ";
+                outputArray[i][3] = " " + result.getString("UNIT") + " ";
+                int nettoPrice = result.getInt("NETTO");
+                outputArray[i][4] = " " + nettoPrice / 100.0 + " ";
+                int nettoValue = nettoPrice * count;
+                outputArray[i][5] = " " + nettoValue / 100.0 + " ";
+                int vatRate = result.getInt("VAT");
+                outputArray[i][6] = " " + vatRate + " ";
+                int vatValue = vatRate * nettoValue / 100;
+                outputArray[i][7] = " " + vatValue / 100.0 + " ";
+                int brutto = nettoValue + vatValue;
+                outputArray[i][8] = " " + brutto / 100.0 + " ";
+                ++i;
+            }
+
+            Printer.printOutput(outputArray);
+
+        } catch (SQLException e) {
             System.out.println("ERROR: Couldn't fetch data from the database: " + e.toString());
-        }*/
+        }
+    }
+
+    private static int getProductsCount(String invoiceNumber) throws SQLException {
+        String query = "SELECT count(*) FROM products WHERE invoicenumber = '" + invoiceNumber + "';";
+        ResultSet result = Database.select(query);
+        result.next();
+        return result.getInt(1);
     }
 }
 
