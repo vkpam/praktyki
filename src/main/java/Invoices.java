@@ -84,29 +84,34 @@ public class Invoices {
         int productscount;
         System.out.print("How many products?: ");
         Scanner reading = new Scanner(System.in);
-            productscount = reading.nextInt();
+        productscount = reading.nextInt();
+        reading = new Scanner(System.in);
 
-            for (int i = 0; i < productscount; ++i) {
+        for (int i = 0; i < productscount; ++i) {
 
-                try {
+            try {
                 String name;
                 System.out.print("\nProduct's name: ");
                 name = reading.nextLine();
                 int count;
                 System.out.print("Count: ");
                 count = reading.nextInt();
+                reading = new Scanner(System.in);
                 String unit;
                 System.out.print("Unit: ");
                 unit = reading.nextLine();
                 int major;
                 System.out.print("Major: ");
                 major = reading.nextInt();
+                reading = new Scanner(System.in);
                 int minor;
                 System.out.print("Minor: ");
                 minor = reading.nextInt();
+                reading = new Scanner(System.in);
                 int vat;
-                System.out.print("\nVAT: ");
+                System.out.print("VAT: ");
                 vat = reading.nextInt();
+                reading = new Scanner(System.in);
 
                 int netto = major * 100 + minor;
 
@@ -114,13 +119,14 @@ public class Invoices {
                         + invoiceNumber + "','" + name + "'," + count + ",'" + unit + "'," + netto + "," + vat + ");";
 
                 Database.sendQueryToDB(query);
-                System.out.println("Invoice added");
+                System.out.println("Product added");
 
 
-            } catch(SQLException | InputMismatchException e){
-                System.out.println("ERROR: Couldn't add invoice: " + e.toString());
+            } catch (SQLException | InputMismatchException e) {
+                System.out.println("ERROR: Couldn't add product: " + e.toString());
             }
         }
 
     }
+    
 }
