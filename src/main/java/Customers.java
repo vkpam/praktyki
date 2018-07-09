@@ -25,7 +25,7 @@ public class Customers {
         }
     }
 
-    public static void add() {
+    private static void add() {
         Scanner reading = new Scanner(System.in);
         String name;
         System.out.print("\nEnter Name: ");
@@ -55,7 +55,6 @@ public class Customers {
 
     public static void showAll() {
         try {
-
             int customersCount = getCustomersCount();
             String[][] outputArray = new String[customersCount + 1][6];
             outputArray[0][0] = " ID ";
@@ -64,7 +63,6 @@ public class Customers {
             outputArray[0][3] = " ADDRESS cont. ";
             outputArray[0][4] = " NIP ";
             outputArray[0][5] = " PHONE ";
-
 
             String query = "SELECT * FROM customers;";
             ResultSet result = Database.select(query);
@@ -83,28 +81,27 @@ public class Customers {
             Printer.printOutput(outputArray);
 
         } catch (SQLException e) {
-            System.out.println("ERROR: Couldn't fetch data from the database: " + e.toString());
+            System.out.println("ERROR: Couldn't fetch customers from the database: " + e.toString());
         }
     }
 
     public static void show(int customerid) {
-        String query = "SELECT * FROM customers WHERE customerid=" + customerid + ";";
+        String query = "SELECT * FROM customers WHERE customerid = " + customerid + ";";
 
         try {
             ResultSet result = Database.select(query);
             result.next();
-            System.out.println(" CUSTOMER ID " + result.getInt("CUSTOMERID") + "\t" +
-                " NAME " + result.getString("NAME") + " ");
+            System.out.println(" NAME " + result.getString("NAME"));
             System.out.println(" ADDRESS " + result.getString("ADDRESS") + ", " +
                 result.getString("ADDRESS2"));
             System.out.println(" NIP " + result.getString("NIP"));
             System.out.println(" PHONE " + result.getString("PHONE"));
         } catch (SQLException e) {
-            System.out.println("ERROR: Couldn't fetch data from the database: " + e.toString());
+            System.out.println("ERROR: Couldn't fetch customer from the database: " + e.toString());
         }
     }
 
-    public static void delete() {
+    private static void delete() {
         showAll();
         System.out.print("Type customer ID to delete: ");
         try {
@@ -120,7 +117,7 @@ public class Customers {
 
     private static int showMenuAndGetAnswer() {
         Scanner reading = new Scanner(System.in);
-        System.out.println("\nCUSTOMERS MENU\n 1.Add customer\n 2.Show customers\n 3.Delete customer\n 0.Main menu");
+        System.out.println("\nCUSTOMERS MENU\n 1.Add customer\n 2.Show all customers\n 3.Delete customer\n 0.Main menu");
         System.out.print("Choose an option: ");
         try {
             return reading.nextInt();
@@ -130,7 +127,7 @@ public class Customers {
     }
 
     private static int getCustomersCount() throws SQLException {
-        String query = "SELECT count(*) FROM customers";
+        String query = "SELECT count(*) FROM customers;";
         ResultSet result = Database.select(query);
         result.next();
         return result.getInt(1);

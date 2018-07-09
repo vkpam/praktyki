@@ -7,9 +7,7 @@ public class Invoices {
 
     public static void showMenu() {
         int answer = showMenuAndGetAnswer();
-        while (answer != 0)
-
-        {
+        while (answer != 0) {
             switch (answer) {
                 case 1:
                     add();
@@ -29,7 +27,7 @@ public class Invoices {
 
     private static int showMenuAndGetAnswer() {
         Scanner reading = new Scanner(System.in);
-        System.out.println("\nINVOICES MENU\n 1.Add invoice\n 2.Show all invoices\n 3.Delete invoices\n 0.Main menu");
+        System.out.println("\nINVOICES MENU\n 1.Add invoice\n 2.Show all invoices\n 3.Delete invoice\n 0.Main menu");
         System.out.print("Choose an option: ");
         try {
             return reading.nextInt();
@@ -74,7 +72,8 @@ public class Invoices {
             comments = reading.nextLine();
 
             String query = "INSERT INTO invoices VALUES(null, '"
-                    + number + "'," + customerid + ",'" + createdate + "','" + selldate + "','" + paymentdate + "','" + payment + "','" + bankname + "','" + accountnr + "','" + currency + "','" + comments + "');";
+                    + number + "'," + customerid + ",'" + createdate + "','" + selldate + "','" + paymentdate + "','"
+                    + payment + "','" + bankname + "','" + accountnr + "','" + currency + "','" + comments + "');";
 
             Database.sendQueryToDB(query);
             System.out.println("Invoice added");
@@ -84,7 +83,6 @@ public class Invoices {
         } catch (SQLException | InputMismatchException e) {
             System.out.println("ERROR: Couldn't add invoice: " + e.toString());
         }
-
     }
 
     private static void addProductsToInvoice(String invoiceNumber) {
@@ -92,11 +90,11 @@ public class Invoices {
         System.out.print("How many products?: ");
         Scanner reading = new Scanner(System.in);
         productscount = reading.nextInt();
-        reading = new Scanner(System.in);
 
         for (int i = 0; i < productscount; ++i) {
 
             try {
+                reading = new Scanner(System.in);
                 String name;
                 System.out.print("\nProduct's name: ");
                 name = reading.nextLine();
@@ -108,17 +106,16 @@ public class Invoices {
                 System.out.print("Unit: ");
                 unit = reading.nextLine();
                 int major;
-                System.out.print("Major: ");
+                System.out.print("Major unit price: ");
                 major = reading.nextInt();
                 reading = new Scanner(System.in);
                 int minor;
-                System.out.print("Minor: ");
+                System.out.print("Minor unit price: ");
                 minor = reading.nextInt();
                 reading = new Scanner(System.in);
                 int vat;
-                System.out.print("VAT: ");
+                System.out.print("VAT rate: ");
                 vat = reading.nextInt();
-                reading = new Scanner(System.in);
 
                 int netto = major * 100 + minor;
 
@@ -128,15 +125,13 @@ public class Invoices {
                 Database.sendQueryToDB(query);
                 System.out.println("Product added");
 
-
             } catch (SQLException | InputMismatchException e) {
                 System.out.println("ERROR: Couldn't add product: " + e.toString());
             }
         }
-
     }
 
-    public static void showAll() {
+    private static void showAll() {
 
         String query = "SELECT * FROM invoices;";
 
@@ -144,8 +139,8 @@ public class Invoices {
             ResultSet result = Database.select(query);
             while (result.next()) {
                 String invoiceNumber = result.getString("NUMBER");
-                System.out.println("\n INVOICE ID " + result.getInt("INVOICEID") + "\t" +
-                        " NUMBER " + invoiceNumber);
+                System.out.println("\n INVOICE NUMBER " + invoiceNumber);
+                System.out.println(" CUSTOMER: ");
                 Customers.show(result.getInt("CUSTOMERID"));
                 System.out.println(" CREATION DATE " + result.getString("CREATIONDATE") + "\t" +
                         " SELL DATE " + result.getString("SELLDATE") + "\t" +
@@ -160,26 +155,25 @@ public class Invoices {
             }
 
         } catch (SQLException e) {
-            System.out.println("ERROR: Couldn't fetch data from the database: " + e.toString());
+            System.out.println("ERROR: Couldn't fetch invoices from the database: " + e.toString());
         }
     }
 
-    public static void showProducts(String invoiceNumber) {
+    private static void showProducts(String invoiceNumber) {
         try {
-
             int productsCount = getProductsCount(invoiceNumber);
             String[][] outputArray = new String[productsCount + 1][9];
             outputArray[0][0] = " ON. ";
             outputArray[0][1] = " NAME ";
             outputArray[0][2] = " COUNT ";  //10
             outputArray[0][3] = " UNIT ";
-            outputArray[0][4] = " NETTO PRICE ";  //100
-            outputArray[0][5] = " NETTO ";  //10*100
+            outputArray[0][4] = " UNIT NETTO PRICE ";  //100
+            outputArray[0][5] = " NETTO VALUE ";  //10*100
             outputArray[0][6] = " VAT RATE ";    //23%
             outputArray[0][7] = " VAT VALUE ";    //23%*10*100
-            outputArray[0][8] = " BRUTTO "; //1230 <- obliczyc
+            outputArray[0][8] = " BRUTTO VALUE "; //1230 <- calculate
 
-            String query = "SELECT * FROM products WHERE invoicenumber='" + invoiceNumber + "';";
+            String query = "SELECT * FROM products WHERE invoicenumber = '" + invoiceNumber + "';";
             ResultSet result = Database.select(query);
 
             int i = 1;
@@ -194,7 +188,7 @@ public class Invoices {
                 int nettoValue = nettoPrice * count;
                 outputArray[i][5] = " " + nettoValue / 100.0 + " ";
                 int vatRate = result.getInt("VAT");
-                outputArray[i][6] = " " + vatRate + " ";
+                outputArray[i][6] = " " + vatRate + "% ";
                 int vatValue = vatRate * nettoValue / 100;
                 outputArray[i][7] = " " + vatValue / 100.0 + " ";
                 int brutto = nettoValue + vatValue;
@@ -205,7 +199,7 @@ public class Invoices {
             Printer.printOutput(outputArray);
 
         } catch (SQLException e) {
-            System.out.println("ERROR: Couldn't fetch data from the database: " + e.toString());
+            System.out.println("ERROR: Couldn't fetch products from the database: " + e.toString());
         }
     }
 
@@ -215,18 +209,19 @@ public class Invoices {
         result.next();
         return result.getInt(1);
     }
-    public static void deleteProductsFromInvoiceAndInvoice() {
+
+    private static void deleteProductsFromInvoiceAndInvoice() {
         showAll();
-        System.out.print("Type number (not ID) to delete: ");
+        System.out.print("\nType number (not ID) to delete: ");
         try {
             Scanner reading = new Scanner(System.in);
             String invoiceNumber = reading.nextLine();
             String query = "DELETE FROM products WHERE invoicenumber = '" + invoiceNumber + "';";
             Database.sendQueryToDB(query);
-            query = "DELETE FROM invoices WHERE number = " + invoiceNumber + ";";
+            query = "DELETE FROM invoices WHERE number = '" + invoiceNumber + "';";
             Database.sendQueryToDB(query);
             System.out.println("Invoice number " + invoiceNumber + " deleted");
-        } catch (SQLException | InputMismatchException e) {
+        } catch (SQLException e) {
             System.out.println("Couldn't delete invoice: " + e.toString());
         }
     }
