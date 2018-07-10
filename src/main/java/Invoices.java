@@ -16,6 +16,9 @@ public class Invoices {
                     showAll();
                     break;
                 case 3:
+                    showByMonth();
+                    break;
+                case 4:
                     deleteProductsFromInvoiceAndInvoice();
                     break;
                 default:
@@ -27,7 +30,7 @@ public class Invoices {
 
     private static int showMenuAndGetAnswer() {
         Scanner reading = new Scanner(System.in);
-        System.out.println("\nINVOICES MENU\n 1.Add invoice\n 2.Show all invoices\n 3.Delete invoice\n 0.Main menu");
+        System.out.println("\nINVOICES MENU\n 1.Add invoice\n 2.Show all invoices\n 3.Show invoices by month\n 4.Delete invoice\n 0.Main menu");
         System.out.print("Choose an option: ");
         try {
             return reading.nextInt();
@@ -43,8 +46,9 @@ public class Invoices {
         try {
             int customerid = reading.nextInt();
             reading = new Scanner(System.in);
+            String lastNumber = getLastInvoiceNumber();
             String number;
-            System.out.print("\nInvoice's number: ");
+            System.out.print("\nInvoice's number (lastly used: " + lastNumber + "): ");
             number = reading.nextLine();
             String createdate;
             System.out.print("Creation date (YYYY-MM-DD): ");
@@ -131,10 +135,23 @@ public class Invoices {
         }
     }
 
-    private static void showAll() {
+    private static void showByMonth() {
+        System.out.print("Type year: ");
+        Scanner reading = new Scanner(System.in);
+        String year = reading.nextLine();
+        System.out.print("Type month (01-12): ");
+        String month = reading.nextLine();
+        String begin = year + "-" + month + "-00";
+        String end = year + "-" + month + "-32";
+        String query = "SELECT * FROM invoices WHERE creationdate > '" + begin + "' AND creationdate < '" + end + "';";
+        showFunction(query);
+    }
 
-        String query = "SELECT * FROM invoices;";
+    public static void showAll() {
+        showFunction("SELECT * FROM invoices;");
+    }
 
+    private static void showFunction(String query) {
         try {
             ResultSet result = Database.select(query);
             while (result.next()) {
@@ -224,6 +241,13 @@ public class Invoices {
         } catch (SQLException e) {
             System.out.println("Couldn't delete invoice: " + e.toString());
         }
+    }
+
+    private static String getLastInvoiceNumber() throws SQLException {
+        String query = "SELECT MAX(number) FROM invoices;";
+        ResultSet result = Database.select(query);
+        result.next();
+        return result.getString(1);
     }
 }
 
