@@ -36,19 +36,20 @@ public class Customers {
         String address2;
         System.out.print("Enter Address (line 2): ");
         address2 = reading.nextLine();
-        try {
-            long nip;
-            System.out.print("Enter NIP: ");
-            nip = reading.nextLong();
-            long phone;
-            System.out.print("Enter Phone: ");
-            phone = reading.nextLong();
-            String query = "INSERT INTO customers VALUES(null, '"
-                    + name + "','" + address + "','" + address2 + "'," + nip + "," + phone + ");";
+        String nip;
+        System.out.print("Enter NIP: ");
+        nip = reading.nextLine();
+        String phone;
+        System.out.print("Enter Phone: ");
+        phone = reading.nextLine();
 
+        String query = "INSERT INTO customers VALUES(null, '"
+                + name + "','" + address + "','" + address2 + "','" + nip + "','" + phone + "');";
+
+        try {
             Database.sendQueryToDB(query);
             System.out.println("Customer added");
-        } catch (SQLException | InputMismatchException e) {
+        } catch (SQLException e) {
             System.out.println("ERROR: Couldn't add customer: " + e.toString());
         }
     }

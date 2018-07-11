@@ -200,11 +200,11 @@ public class Invoices {
                 int count = result.getInt("COUNT");
                 outputArray[i][2] = " " + count + " ";
                 outputArray[i][3] = " " + result.getString("UNIT") + " ";
-                int nettoPrice = result.getInt("NETTO");
+                int nettoPrice = result.getInt("NETPRICE");
                 outputArray[i][4] = " " + nettoPrice / 100.0 + " ";
                 int nettoValue = nettoPrice * count;
                 outputArray[i][5] = " " + nettoValue / 100.0 + " ";
-                int vatRate = result.getInt("VAT");
+                int vatRate = result.getInt("VATRATE");
                 outputArray[i][6] = " " + vatRate + "% ";
                 int vatValue = vatRate * nettoValue / 100;
                 outputArray[i][7] = " " + vatValue / 100.0 + " ";
