@@ -1,4 +1,3 @@
-/*CHYBA JUZ DZIALA DOBRZE*/
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.InputMismatchException;
@@ -83,7 +82,6 @@ public class CarEvidence {
 
     public static void showCarEvidenceFunction(ResultSet result, int evidenceCount) {
         try {
-
             String[][] outputArray = new String[evidenceCount + 1][6];
             outputArray[0][0] = " EVIDENCE ID ";
             outputArray[0][1] = " SOURCE ";
@@ -91,7 +89,6 @@ public class CarEvidence {
             outputArray[0][3] = " GOAL ";
             outputArray[0][4] = " DATE ";
             outputArray[0][5] = " DISTANCE ";
-
 
             int i = 1;
             while (result.next()) {
@@ -115,7 +112,8 @@ public class CarEvidence {
         try {
             String query = "SELECT * FROM carevidence;";
             ResultSet result = Database.select(query);
-            int evidenceCount = getCarEvidenceCount();
+            query = "SELECT count(*) FROM carevidence;";
+            int evidenceCount = getEvidenceCountHelper(query);
             showCarEvidenceFunction(result, evidenceCount);
         } catch (SQLException e) {
             System.out.println("ERROR: Couldn't show all car evidence: " + e.toString());
@@ -133,22 +131,15 @@ public class CarEvidence {
         String query = "SELECT * FROM carevidence WHERE date > '" + begin + "' AND date < '" + end + "';";
         try {
             ResultSet result = Database.select(query);
-            int evidenceCountByMonth = getEvidenceCountByMonth(begin, end);
+            query = "SELECT count(*) FROM carevidence WHERE date > '" + begin + "' AND date < '" + end + "';";
+            int evidenceCountByMonth = getEvidenceCountHelper(query);
             showCarEvidenceFunction(result, evidenceCountByMonth);
         } catch (SQLException e) {
             System.out.println("ERROR: Couldn't fetch number of car evidence in month from the database: " + e.toString());
         }
     }
 
-    private static int getEvidenceCountByMonth(String begin, String end) throws SQLException {
-        String query = "SELECT count(*) FROM carevidence WHERE date > '" + begin + "' AND date < '" + end + "';";
-        ResultSet result = Database.select(query);
-        result.next();
-        return result.getInt(1);
-    }
-
-    private static int getCarEvidenceCount() throws SQLException {
-        String query = "SELECT count(*) FROM carevidence;";
+    private static int getEvidenceCountHelper(String query) throws SQLException {
         ResultSet result = Database.select(query);
         result.next();
         return result.getInt(1);

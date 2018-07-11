@@ -18,7 +18,7 @@ public class Main {
                 case 2:
                     Invoices.showMenu();
                     break;
-                case 4:
+                case 3:
                     CarEvidence.showCarEvidenceMenu();
                     break;
                 default:
@@ -32,7 +32,7 @@ public class Main {
 
     private static int showMenuAndGetAnswer() {
         Scanner reading = new Scanner(System.in);
-        System.out.println("\nMENU\n 1.Customers\n 2.Invoices\n 3.Taxes\n 4.Car evidence\n 0.Exit");
+        System.out.println("\nMENU\n 1.Customers\n 2.Invoices\n 3.Car evidence\n 4.Taxes\n 0.Exit");
         System.out.print("Choose an option: ");
         try {
             return reading.nextInt();
