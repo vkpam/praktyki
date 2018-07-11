@@ -18,6 +18,9 @@ public class Main {
                 case 2:
                     Invoices.showMenu();
                     break;
+                case 4:
+                    CarEvidence.showCarEvidenceMenu();
+                    break;
                 default:
                     System.out.println("Wrong answer, please type again");
             }
@@ -29,11 +32,11 @@ public class Main {
 
     private static int showMenuAndGetAnswer() {
         Scanner reading = new Scanner(System.in);
-        System.out.println("\nMENU\n 1.Customers\n 2.Invoices\n 3.Taxes\n 0.Exit");
+        System.out.println("\nMENU\n 1.Customers\n 2.Invoices\n 3.Taxes\n 4.Car evidence\n 0.Exit");
         System.out.print("Choose an option: ");
         try {
             return reading.nextInt();
-        } catch(InputMismatchException e) {
+        } catch (InputMismatchException e) {
             return -1;
         }
     }
