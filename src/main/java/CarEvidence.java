@@ -12,13 +12,13 @@ public class CarEvidence {
                     addCarEvidence();
                     break;
                 case 2:
-                    deleteCarEvidence();
-                    break;
-                case 3:
                     showAllCarEvidence();
                     break;
-                case 4:
+                case 3:
                     showCarEvidenceByMonth();
+                    break;
+                case 4:
+                    deleteCarEvidence();
                     break;
                 default:
                     System.out.println("Wrong answer, please type again");
@@ -29,7 +29,7 @@ public class CarEvidence {
 
     private static int showCarEvidenceMenuAndGetAnswer() {
         Scanner reading = new Scanner(System.in);
-        System.out.println("\nCAR EVIDENCE MENU\n 1.Add\n 2.Delete\n 3.Show all\n 4.Show by month\n 0.Main menu");
+        System.out.println("\nCAR EVIDENCE MENU\n 1.Add\n 2.Show all\n 3.Show by month\n 4.Delete\n 0.Main menu");
         System.out.print("Choose an option: ");
         try {
             return reading.nextInt();
@@ -54,11 +54,10 @@ public class CarEvidence {
         date = reading.nextLine();
         int distance;
         System.out.print("Distance: ");
-        distance = reading.nextInt();
-
-        String query = "INSERT INTO carevidence VALUES(null, '"
-                + source + "','" + destination + "','" + goal + "','" + date + "'," + distance + ");";
         try {
+            distance = reading.nextInt();
+            String query = "INSERT INTO carevidence VALUES(null, '"
+                    + source + "','" + destination + "','" + goal + "','" + date + "'," + distance + ");";
             Database.sendQueryToDB(query);
             System.out.println("CarEvidence added");
         } catch (SQLException | InputMismatchException e) {
@@ -80,7 +79,7 @@ public class CarEvidence {
         }
     }
 
-    public static void showCarEvidenceFunction(ResultSet result, int evidenceCount) {
+    private static void showCarEvidenceFunction(ResultSet result, int evidenceCount) {
         try {
             String[][] outputArray = new String[evidenceCount + 1][6];
             outputArray[0][0] = " EVIDENCE ID ";
@@ -108,7 +107,7 @@ public class CarEvidence {
         }
     }
 
-    public static void showAllCarEvidence() {
+    private static void showAllCarEvidence() {
         try {
             String query = "SELECT * FROM carevidence;";
             ResultSet result = Database.select(query);
@@ -135,7 +134,7 @@ public class CarEvidence {
             int evidenceCountByMonth = getEvidenceCountHelper(query);
             showCarEvidenceFunction(result, evidenceCountByMonth);
         } catch (SQLException e) {
-            System.out.println("ERROR: Couldn't fetch number of car evidence in month from the database: " + e.toString());
+            System.out.println("ERROR: Couldn't fetch car evidence in month from the database: " + e.toString());
         }
     }
 
