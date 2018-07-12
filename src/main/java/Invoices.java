@@ -1,5 +1,7 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -53,12 +55,21 @@ public class Invoices {
             String createdate;
             System.out.print("Creation date (YYYY-MM-DD): ");
             createdate = reading.nextLine();
+            if(createdate.isEmpty()) {
+                createdate = getLocalDate();
+            }
             String selldate;
             System.out.print("Sell date (YYYY-MM-DD): ");
             selldate = reading.nextLine();
+            if(selldate.isEmpty()) {
+                selldate = getLocalDate();
+            }
             String paymentdate;
             System.out.print("Payment date (YYYY-MM-DD): ");
             paymentdate = reading.nextLine();
+            if(paymentdate.isEmpty()) {
+                paymentdate = getLocalDate();
+            }
             String payment;
             System.out.print("Payment type: ");
             payment = reading.nextLine();
@@ -153,8 +164,15 @@ public class Invoices {
 
     private static void showFunction(String query) {
         try {
+            int pageLimit = Configuration.getIntegerParameter("pagelimit");
             ResultSet result = Database.select(query);
+            int alreadyShownInvoicesCount = 0;
             while (result.next()) {
+                if (alreadyShownInvoicesCount % pageLimit == 0 && alreadyShownInvoicesCount != 0) {
+                    System.out.print("To continue press ENTER:");
+                    Scanner reading = new Scanner(System.in);
+                    reading.nextLine();
+                }
                 String invoiceNumber = result.getString("NUMBER");
                 System.out.println("\n INVOICE NUMBER " + invoiceNumber);
                 System.out.println(" CUSTOMER: ");
@@ -169,6 +187,7 @@ public class Invoices {
                 System.out.println(" COMMENTS " + result.getString("COMMENTS"));
 
                 showProducts(invoiceNumber);
+                ++alreadyShownInvoicesCount;
             }
 
         } catch (SQLException e) {
@@ -244,10 +263,16 @@ public class Invoices {
     }
 
     private static String getLastInvoiceNumber() throws SQLException {
-        String query = "SELECT MAX(number) FROM invoices;";
+        String query = "select number from invoices where invoiceid = (select max(invoiceid) from invoices);";
         ResultSet result = Database.select(query);
         result.next();
         return result.getString(1);
+    }
+
+    private static String getLocalDate() {
+        LocalDate localDate1 = LocalDate.now();
+        String date = localDate1.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        return date;
     }
 }
 

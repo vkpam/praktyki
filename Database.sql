@@ -40,6 +40,11 @@ goal text not null,
 date date not null,
 distance integer not null);
 
+CREATE TABLE configuration(
+configurationid INTEGER PRIMARY KEY autoincrement,
+paramname TEXT not null unique,
+paramvalue TEXT not null);
+
 insert into customers values(null,'Google LLC','Mountain View','0009-4532 Mountain View','2345615432','77898908723');
 insert into customers values(null,'Youtube','California 12','0098-7896 California','2345142634','6534534211');
 insert into customers values(null,'Instagram LLC','Berlin 56','559-12 Berlin','15243265478','6152434352');
@@ -58,3 +63,10 @@ insert into products values(null,'10','whatever',1,'kg',100010,50);
 
 insert into carevidence values(null,'Krakow','Brzesko','57','2018-07-10',57);
 insert into carevidence values(null,'Brzesko','Krakow','Buissnes visit','2018-07-10',57);
+
+insert into configuration values(null, 'ownername', 'Dawid Wawryka Uslugi IT');
+insert into configuration values(null, 'owneraddress', 'ul. Kosciuszki 72/10');
+insert into configuration values(null, 'owneraddress2', '32-800 Brzesko');
+insert into configuration values(null, 'ownernip', '8691900399');
+insert into configuration values(null, 'ownerphone', '48696643434');
+insert into configuration values(null, 'pagelimit', '10');
