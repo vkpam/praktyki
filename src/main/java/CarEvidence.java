@@ -12,12 +12,15 @@ public class CarEvidence {
                     addCarEvidence();
                     break;
                 case 2:
-                    showAllCarEvidence();
+                    addManySimilarCarEvidence();
                     break;
                 case 3:
-                    showCarEvidenceByMonth();
+                    showAllCarEvidence();
                     break;
                 case 4:
+                    showCarEvidenceByMonth();
+                    break;
+                case 5:
                     deleteCarEvidence();
                     break;
                 default:
@@ -29,7 +32,7 @@ public class CarEvidence {
 
     private static int showCarEvidenceMenuAndGetAnswer() {
         Scanner reading = new Scanner(System.in);
-        System.out.println("\nCAR EVIDENCE MENU\n 1.Add\n 2.Show all\n 3.Show by month\n 4.Delete\n 0.Main menu");
+        System.out.println("\nCAR EVIDENCE MENU\n 1.Add\n 2.Add many similar\n 3.Show all\n 4.Show by month\n 5.Delete\n 0.Main menu");
         System.out.print("Choose an option: ");
         try {
             return reading.nextInt();
@@ -60,6 +63,39 @@ public class CarEvidence {
                     + source + "','" + destination + "','" + goal + "','" + date + "'," + distance + ");";
             Database.sendQueryToDB(query);
             System.out.println("CarEvidence added");
+        } catch (SQLException | InputMismatchException e) {
+            System.out.println("ERROR: Couldn't add car evidence: " + e.toString());
+        }
+    }
+
+    private static void addManySimilarCarEvidence() {
+        Scanner reading = new Scanner(System.in);
+        System.out.print("How many car evidence will you add ?: ");
+        try {
+            int carEvidenceCount = reading.nextInt();
+            reading = new Scanner(System.in);
+            String source;
+            System.out.print("\nSource: ");
+            source = reading.nextLine();
+            String destination;
+            System.out.print("Destination: ");
+            destination = reading.nextLine();
+            String goal;
+            System.out.print("Goal: ");
+            goal = reading.nextLine();
+            int distance;
+            System.out.print("Distance: ");
+            distance = reading.nextInt();
+            reading = new Scanner(System.in);
+            String date;
+            for (int i = 1; i <= carEvidenceCount; i++) {
+                System.out.print("Date " + i + " (yyyy-mm-dd): ");
+                date = reading.nextLine();
+                String query = "INSERT INTO carevidence VALUES(null, '"
+                        + source + "','" + destination + "','" + goal + "','" + date + "'," + distance + ");";
+                Database.sendQueryToDB(query);
+                System.out.println("CarEvidence " + i + " added");
+            }
         } catch (SQLException | InputMismatchException e) {
             System.out.println("ERROR: Couldn't add car evidence: " + e.toString());
         }
