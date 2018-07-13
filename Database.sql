@@ -45,6 +45,13 @@ configurationid INTEGER PRIMARY KEY autoincrement,
 paramname TEXT not null unique,
 paramvalue TEXT not null);
 
+CREATE TABLE costs(
+costid INTEGER PRIMARY KEY autoincrement,
+date DATE not null,
+description TEXT not null,
+netvalue INTEGER not null,
+vatvalue INTEGER not null);
+
 insert into customers values(null,'Google LLC','Mountain View','0009-4532 Mountain View','2345615432','77898908723');
 insert into customers values(null,'Youtube','California 12','0098-7896 California','2345142634','6534534211');
 insert into customers values(null,'Instagram LLC','Berlin 56','559-12 Berlin','15243265478','6152434352');

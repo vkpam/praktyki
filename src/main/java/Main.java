@@ -21,6 +21,9 @@ public class Main {
                 case 3:
                     CarEvidence.showCarEvidenceMenu();
                     break;
+                case 4:
+                    Costs.showMenu();
+                    break;
                 default:
                     System.out.println("Wrong answer, please type again");
             }
@@ -32,7 +35,7 @@ public class Main {
 
     private static int showMenuAndGetAnswer() {
         Scanner reading = new Scanner(System.in);
-        System.out.println("\nMENU\n 1.Customers\n 2.Invoices\n 3.Car evidence\n 4.Taxes\n 0.Exit");
+        System.out.println("\nMENU\n 1.Customers\n 2.Invoices\n 3.Car evidence\n 4.Costs\n 5.Taxes\n 0.Exit");
         System.out.print("Choose an option: ");
         try {
             return reading.nextInt();
