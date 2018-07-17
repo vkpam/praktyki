@@ -155,7 +155,7 @@ public class CarEvidence {
             String query = "SELECT * " + querySuffix;
             ResultSet result = Database.select(query);
             query = "SELECT count(*) " + querySuffix;
-            int evidenceCount = getEvidenceCountHelper(query);
+            int evidenceCount = Database.getCountHelper(query);
             showCarEvidenceFunction(result, evidenceCount);
         } catch (SQLException e) {
             System.out.println("ERROR: Couldn't show all car evidence: " + e.toString());
@@ -174,16 +174,10 @@ public class CarEvidence {
         try {
             ResultSet result = Database.select(query);
             query = "SELECT count(*) FROM carevidence WHERE date > '" + begin + "' AND date < '" + end + "';";
-            int evidenceCountByMonth = getEvidenceCountHelper(query);
+            int evidenceCountByMonth = Database.getCountHelper(query);
             showCarEvidenceFunction(result, evidenceCountByMonth);
         } catch (SQLException e) {
             System.out.println("ERROR: Couldn't fetch car evidence in month from the database: " + e.toString());
         }
-    }
-
-    private static int getEvidenceCountHelper(String query) throws SQLException {
-        ResultSet result = Database.select(query);
-        result.next();
-        return result.getInt(1);
     }
 }

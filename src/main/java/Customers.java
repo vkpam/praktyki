@@ -56,7 +56,7 @@ public class Customers {
 
     public static void showAll() {
         try {
-            int customersCount = getCustomersCount();
+            int customersCount = Database.getCountHelper("SELECT count(*) FROM customers;");
             String[][] outputArray = new String[customersCount + 1][6];
             outputArray[0][0] = " ID ";
             outputArray[0][1] = " NAME ";
@@ -125,12 +125,5 @@ public class Customers {
         } catch (InputMismatchException e) {
             return -1;
         }
-    }
-
-    private static int getCustomersCount() throws SQLException {
-        String query = "SELECT count(*) FROM customers;";
-        ResultSet result = Database.select(query);
-        result.next();
-        return result.getInt(1);
     }
 }

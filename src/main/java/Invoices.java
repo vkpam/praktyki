@@ -195,7 +195,8 @@ public class Invoices {
 
     private static void showProducts(String invoiceNumber) {
         try {
-            int productsCount = getProductsCount(invoiceNumber);
+            String countQuery = "SELECT count(*) FROM products WHERE invoicenumber = '" + invoiceNumber + "';";
+            int productsCount = Database.getCountHelper(countQuery);
             String[][] outputArray = new String[productsCount + 1][9];
             outputArray[0][0] = " ON. ";
             outputArray[0][1] = " NAME ";
@@ -235,13 +236,6 @@ public class Invoices {
         } catch (SQLException e) {
             System.out.println("ERROR: Couldn't fetch products from the database: " + e.toString());
         }
-    }
-
-    private static int getProductsCount(String invoiceNumber) throws SQLException {
-        String query = "SELECT count(*) FROM products WHERE invoicenumber = '" + invoiceNumber + "';";
-        ResultSet result = Database.select(query);
-        result.next();
-        return result.getInt(1);
     }
 
     private static void deleteProductsFromInvoiceAndInvoice() {

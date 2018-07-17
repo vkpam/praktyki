@@ -165,7 +165,7 @@ public class Costs {
         try {
             ResultSet result = Database.select(query);
             query = "SELECT count(*) " + querySuffix;
-            int costsCount = getCostsCountHelper(query);
+            int costsCount = Database.getCountHelper(query);
             showCostsFunction(result, costsCount);
         } catch (SQLException e) {
             System.out.println("ERROR: Couldn't show all costs: " + e.toString());
@@ -184,7 +184,7 @@ public class Costs {
         try {
             ResultSet result = Database.select(query);
             query = "SELECT count(*) FROM costs WHERE date > '" + begin + "' AND date < '" + end + "';";
-            int costsCountByMonth = getCostsCountHelper(query);
+            int costsCountByMonth = Database.getCountHelper(query);
             showCostsFunction(result, costsCountByMonth);
         } catch (SQLException e) {
             System.out.println("ERROR: Couldn't fetch costs in month from the database: " + e.toString());
@@ -197,17 +197,11 @@ public class Costs {
         try {
             ResultSet result = Database.select(query);
             query = "SELECT count(*) " + querySuffix;
-            int carCostCount = getCostsCountHelper(query);
+            int carCostCount = Database.getCountHelper(query);
             showCostsFunction(result, carCostCount);
         } catch (SQLException e) {
             System.out.println("ERROR: Couldn't fetch car costs from the database: " + e.toString());
         }
-    }
-
-    private static int getCostsCountHelper(String query) throws SQLException {
-        ResultSet result = Database.select(query);
-        result.next();
-        return result.getInt(1);
     }
 
     private static void deleteCosts() {
