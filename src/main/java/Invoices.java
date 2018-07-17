@@ -55,20 +55,20 @@ public class Invoices {
             String createdate;
             System.out.print("Creation date (YYYY-MM-DD): ");
             createdate = reading.nextLine();
-            if(createdate.isEmpty()) {
-                createdate = getLocalDate();
+            if (createdate.isEmpty()) {
+                createdate = TimeUtils.getTodaysDate();
             }
             String selldate;
             System.out.print("Sell date (YYYY-MM-DD): ");
             selldate = reading.nextLine();
-            if(selldate.isEmpty()) {
-                selldate = getLocalDate();
+            if (selldate.isEmpty()) {
+                selldate = TimeUtils.getTodaysDate();
             }
             String paymentdate;
             System.out.print("Payment date (YYYY-MM-DD): ");
             paymentdate = reading.nextLine();
-            if(paymentdate.isEmpty()) {
-                paymentdate = getLocalDate();
+            if (paymentdate.isEmpty()) {
+                paymentdate = TimeUtils.getTodaysDate();
             }
             String payment;
             System.out.print("Payment type: ");
@@ -268,11 +268,6 @@ public class Invoices {
         result.next();
         return result.getString(1);
     }
-
-    private static String getLocalDate() {
-        LocalDate localDate1 = LocalDate.now();
-        String date = localDate1.format(DateTimeFormatter.ISO_LOCAL_DATE);
-        return date;
-    }
 }
+
 

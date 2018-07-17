@@ -55,6 +55,9 @@ public class CarEvidence {
         String date;
         System.out.print("Date (yyyy-mm-dd): ");
         date = reading.nextLine();
+        if (date.isEmpty()) {
+            date = TimeUtils.getTodaysDate();
+        }
         int distance;
         System.out.print("Distance: ");
         try {
@@ -91,6 +94,9 @@ public class CarEvidence {
             for (int i = 1; i <= carEvidenceCount; i++) {
                 System.out.print("Date " + i + " (yyyy-mm-dd): ");
                 date = reading.nextLine();
+                if (date.isEmpty()) {
+                    date = TimeUtils.getTodaysDate();
+                }
                 String query = "INSERT INTO carevidence VALUES(null, '"
                         + source + "','" + destination + "','" + goal + "','" + date + "'," + distance + ");";
                 Database.sendQueryToDB(query);
