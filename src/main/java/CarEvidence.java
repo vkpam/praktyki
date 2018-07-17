@@ -151,9 +151,10 @@ public class CarEvidence {
 
     private static void showAllCarEvidence() {
         try {
-            String query = "SELECT * FROM carevidence;";
+            String querySuffix = "FROM carevidence WHERE date >= '" + TimeUtils.getBeginningOfTheYear() + "';";
+            String query = "SELECT * " + querySuffix;
             ResultSet result = Database.select(query);
-            query = "SELECT count(*) FROM carevidence;";
+            query = "SELECT count(*) " + querySuffix;
             int evidenceCount = getEvidenceCountHelper(query);
             showCarEvidenceFunction(result, evidenceCount);
         } catch (SQLException e) {

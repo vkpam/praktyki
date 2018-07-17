@@ -3,7 +3,7 @@ import java.sql.SQLException;
 
 public class Configuration {
     public static String getStringParameter(String paramName) throws SQLException {
-        String query = "SELECT paramvalue FROM configuration WHERE paramname = '" + paramName + "');";
+        String query = "SELECT paramvalue FROM configuration WHERE paramname = '" + paramName + "';";
         ResultSet result = Database.select(query);
         result.next();
         return result.getString(1);

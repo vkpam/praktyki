@@ -1,7 +1,5 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -159,7 +157,7 @@ public class Invoices {
     }
 
     public static void showAll() {
-        showFunction("SELECT * FROM invoices;");
+        showFunction("SELECT * FROM invoices WHERE selldate >= '" + TimeUtils.getBeginningOfTheYear() + "';");
     }
 
     private static void showFunction(String query) {
