@@ -255,6 +255,10 @@ public class Invoices {
     }
 
     private static String getLastInvoiceNumber() throws SQLException {
+        int invoicesCount = Database.getCountHelper("select count(*) from invoices;");
+        if(invoicesCount == 0) {
+            return "[NO INVOICES]";
+        }
         String query = "select number from invoices where invoiceid = (select max(invoiceid) from invoices);";
         ResultSet result = Database.select(query);
         result.next();
