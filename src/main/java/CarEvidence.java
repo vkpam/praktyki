@@ -122,6 +122,8 @@ public class CarEvidence {
     }
 
     private static void showCarEvidenceFunction(ResultSet result, int evidenceCount) {
+        int totalDistance = 0;
+
         try {
             String[][] outputArray = new String[evidenceCount + 1][6];
             outputArray[0][0] = " EVIDENCE ID ";
@@ -138,11 +140,17 @@ public class CarEvidence {
                 outputArray[i][2] = " " + result.getString("DESTINATION") + " ";
                 outputArray[i][3] = " " + result.getString("GOAL") + " ";
                 outputArray[i][4] = " " + result.getString("DATE") + " ";
-                outputArray[i][5] = " " + result.getString("DISTANCE") + " ";
+                int distance = result.getInt("DISTANCE");
+                totalDistance += distance;
+                outputArray[i][5] = " " + distance + " ";
                 ++i;
             }
 
             Printer.printOutput(outputArray);
+
+            System.out.println("Total distance :          " + totalDistance);
+            double plnPerKm = Configuration.getDoubleParameter("plnperkm");
+            System.out.println("Total car costs limit :   " + totalDistance * plnPerKm);
 
         } catch (SQLException e) {
             System.out.println("ERROR: Couldn't fetch car evidence from the database: " + e.toString());

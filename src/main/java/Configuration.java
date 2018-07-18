@@ -12,4 +12,11 @@ public class Configuration {
     public static int getIntegerParameter(String paramName) throws SQLException {
         return Integer.parseInt(getStringParameter(paramName));
     }
+
+    public static double getDoubleParameter(String paramName) throws SQLException {
+        String query = "SELECT paramvalue FROM configuration WHERE paramname = '" + paramName + "';";
+        ResultSet result = Database.select(query);
+        result.next();
+        return result.getDouble(1);
+    }
 }
