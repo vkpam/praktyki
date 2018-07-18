@@ -150,7 +150,8 @@ public class CarEvidence {
 
             System.out.println("Total distance :          " + totalDistance);
             double plnPerKm = Configuration.getDoubleParameter("plnperkm");
-            System.out.println("Total car costs limit :   " + totalDistance * plnPerKm);
+            // Round to 2 decimal digits, e.g. 100.50 instead of 100.499999
+            System.out.format("Total car costs limit :   %.2f %n", totalDistance * plnPerKm);
 
         } catch (SQLException e) {
             System.out.println("ERROR: Couldn't fetch car evidence from the database: " + e.toString());
