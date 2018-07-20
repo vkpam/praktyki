@@ -9,6 +9,7 @@ public class Main {
 
         Database.connect();
         System.out.println("Company account v1.0");
+        showLogo();
         int answer = showMenuAndGetAnswer();
         while (answer != 0) {
             switch (answer) {
@@ -47,4 +48,16 @@ public class Main {
         }
     }
 
+    private static void showLogo() {
+        System.out.println("\n" +
+                "\n" +
+                " _______  _____  _______  _____  _______ __   _ __   __     ----------------\n" +
+                " |       |     | |  |  | |_____] |_____| | \\  |   \\_/     --|---------|---\n" +
+                " |_____  |_____| |  |  | |       |     | |  \\_|    |          ----------------\n" +
+                "                                                            ----------------\n"
+        +" _______ _______ _______  _____  _     _ __   _ _______            ----|------|------\n" +
+                " |_____| |       |       |     | |     | | \\  |    |        ----------------\n" +
+                " |     | |_____  |_____  |_____| |_____| |  \\_|    |   \n" +
+                "                                                       \n");
+    }
 }
