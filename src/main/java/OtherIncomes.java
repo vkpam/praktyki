@@ -49,7 +49,7 @@ public class OtherIncomes {
             System.out.print("Description: ");
             description = reading.nextLine();
             String date;
-            System.out.print("Date: ");
+            System.out.print("Date (YYYY-MM-DD): ");
             date = reading.nextLine();
             if (date.isEmpty()) {
                 date = TimeUtils.getTodaysDate();
@@ -67,7 +67,7 @@ public class OtherIncomes {
             Database.sendQueryToDB(query);
             System.out.println("Income added");
 
-        } catch (SQLException e) {
+        } catch (SQLException | InputMismatchException e) {
             System.out.println("ERROR: Couldn't add income: " + e.toString());
         }
     }
