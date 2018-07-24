@@ -3,8 +3,8 @@ import java.util.Scanner;
 public class ConvertIntToWord {
 
     private static String jednosci[] = {" ", " jeden", " dwa", " trzy", " cztery", " pięć", " sześć", " siedem", " osiem", " dziewięć"};
-    private static String nastki[] = {" dziesięć", " jedenaście", " dwanaście", " trzynaście", " czternaście", " piętnaście", " szesnaście", " siedemnaście", " osiemnaście", " dziewiętnaście"};
-    private static String dziesiatki[] = {"", " dziesięć", " dwadzieścia", " trzydzieści", " czterdzieści", " pięćdziesiąt", " szesśćdziesiąt", " siedemdziesiąt", " osiemdziesiąt", " dziewięćdziesiąt"};
+    private static String nastki[] = {" dziesięć", " jedynaście", " dwanaście", " trzynaście", " czternaście", " piętnaście", " szesnaście", " siedemnaście", " osiemnaście", " dziewiętnaście"};
+    private static String dziesiatki[] = {"", " dziesięć", " dwadzieścia", " trzydzieści", " czterdzieści", " pięćdziesiąt", " sześćdziesiąt", " siedemdziesiąt", " osiemdziesiąt", " dziewięćdziesiąt"};
     private static String setki[] = {"", " sto", " dwieście", " trzysta", " czterysta", " pięćset", " sześćset", " siedemset", " osiemset", " dziewięćset"};
     private static String x[] = {"", " tys.", " mln.", " mld.", " bln.", " bld."};
 
@@ -14,14 +14,14 @@ public class ConvertIntToWord {
         int liczba, koncowka;
         int rzad = 0;
         int j = 0;
-        int minus = 0;
+        boolean minus = false;
 
         System.out.print("Type number: ");
         Scanner reading = new Scanner(System.in);
         liczba = reading.nextInt();
 
         if (liczba < 0) {
-            minus = 1;
+            minus = true;
             liczba = -liczba;
         }
 
@@ -47,7 +47,7 @@ public class ConvertIntToWord {
             j++;
         }
 
-        if (minus == 1) slownie = "minus" + slownie;
+        if (minus) slownie = "minus" + slownie;
 
         System.out.println("Odpowiedz: " + slownie);
     }
