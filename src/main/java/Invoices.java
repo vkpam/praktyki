@@ -111,9 +111,9 @@ public class Invoices {
         Scanner reading = new Scanner(System.in);
         String invoiceNumber = reading.nextLine();
         try {
-            String query = "UPDATE INVOICES SET PAID = 1 WHERE INVOICEID = " + invoiceNumber + ";";
+            String query = "UPDATE INVOICES SET PAID = 1 WHERE number = '" + invoiceNumber + "';";
             Database.sendQueryToDB(query);
-            System.out.println("Invoice number " + invoiceNumber + " was paid");
+            System.out.println("Invoice number " + invoiceNumber + " has been paid");
         } catch (SQLException e) {
             System.out.println("Couldn't mark invoice paid: " + e.toString());
         }
@@ -208,7 +208,8 @@ public class Invoices {
                 System.out.println(" BANKNAME " + result.getString("BANKNAME") + "\t" +
                         " ACCOUNT NUMBER " + result.getString("ACCOUNTNR"));
                 System.out.println(" COMMENTS " + result.getString("COMMENTS"));
-                System.out.println(" PAID " + result.getInt("PAID"));
+                int paid = result.getInt("PAID");
+                System.out.println(" PAID " + (paid == 1 ? "YES" : "NO"));
 
                 showProducts(invoiceNumber);
                 ++alreadyShownInvoicesCount;
