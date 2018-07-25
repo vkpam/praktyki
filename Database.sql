@@ -20,6 +20,7 @@ bankname text,
 accountnr text,
 currency text not null,
 comments text,
+paid integer,
 foreign key(customerid) references customers(customerid));
 
 create table products(

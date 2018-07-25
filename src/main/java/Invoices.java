@@ -13,12 +13,18 @@ public class Invoices {
                     add();
                     break;
                 case 2:
-                    showAll();
+                    markInvoiceAsPaid();
                     break;
                 case 3:
-                    showByMonth();
+                    showAll();
                     break;
                 case 4:
+                    showByMonth();
+                    break;
+                case 5:
+                    showUnpaidInvoices();
+                    break;
+                case 6:
                     deleteProductsFromInvoiceAndInvoice();
                     break;
                 default:
@@ -30,7 +36,7 @@ public class Invoices {
 
     private static int showMenuAndGetAnswer() {
         Scanner reading = new Scanner(System.in);
-        System.out.println("\nINVOICES MENU\n 1.Add invoice\n 2.Show all invoices\n 3.Show invoices by month\n 4.Delete invoice\n 0.Main menu");
+        System.out.println("\nINVOICES MENU\n 1.Add invoice\n 2.Mark invoice as paid\n 3.Show all invoices\n 4.Show invoices by month\n 5.Show unpaid invoices\n 6.Delete invoice\n 0.Main menu");
         System.out.print("Choose an option: ");
         try {
             return reading.nextInt();
@@ -83,10 +89,11 @@ public class Invoices {
             String comments;
             System.out.print("Comments: ");
             comments = reading.nextLine();
+            int paid = 0;
 
             String query = "INSERT INTO invoices VALUES(null, '"
                     + number + "'," + customerid + ",'" + createdate + "','" + selldate + "','" + paymentdate + "','"
-                    + payment + "','" + bankname + "','" + accountnr + "','" + currency + "','" + comments + "');";
+                    + payment + "','" + bankname + "','" + accountnr + "','" + currency + "','" + comments + "'," + paid + ");";
 
             Database.sendQueryToDB(query);
             System.out.println("Invoice added");
@@ -95,6 +102,20 @@ public class Invoices {
 
         } catch (SQLException | InputMismatchException e) {
             System.out.println("ERROR: Couldn't add invoice: " + e.toString());
+        }
+    }
+
+    private static void markInvoiceAsPaid() {
+        showAll();
+        System.out.print("Type invoice number to mark paid: ");
+        Scanner reading = new Scanner(System.in);
+        String invoiceNumber = reading.nextLine();
+        try {
+            String query = "UPDATE INVOICES SET PAID = 1 WHERE INVOICEID = " + invoiceNumber + ";";
+            Database.sendQueryToDB(query);
+            System.out.println("Invoice number " + invoiceNumber + " was paid");
+        } catch (SQLException e) {
+            System.out.println("Couldn't mark invoice paid: " + e.toString());
         }
     }
 
@@ -156,8 +177,12 @@ public class Invoices {
         showFunction(query);
     }
 
-    public static void showAll() {
+    private static void showAll() {
         showFunction("SELECT * FROM invoices WHERE selldate >= '" + TimeUtils.getBeginningOfTheYear() + "';");
+    }
+
+    private static void showUnpaidInvoices() {
+        showFunction("SELECT * FROM invoices WHERE paid = 0");
     }
 
     private static void showFunction(String query) {
@@ -183,6 +208,7 @@ public class Invoices {
                 System.out.println(" BANKNAME " + result.getString("BANKNAME") + "\t" +
                         " ACCOUNT NUMBER " + result.getString("ACCOUNTNR"));
                 System.out.println(" COMMENTS " + result.getString("COMMENTS"));
+                System.out.println(" PAID " + result.getInt("PAID"));
 
                 showProducts(invoiceNumber);
                 ++alreadyShownInvoicesCount;
@@ -256,7 +282,7 @@ public class Invoices {
 
     private static String getLastInvoiceNumber() throws SQLException {
         int invoicesCount = Database.getCountHelper("select count(*) from invoices;");
-        if(invoicesCount == 0) {
+        if (invoicesCount == 0) {
             return "[NO INVOICES]";
         }
         String query = "select number from invoices where invoiceid = (select max(invoiceid) from invoices);";
