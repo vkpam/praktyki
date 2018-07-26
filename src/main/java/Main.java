@@ -28,9 +28,6 @@ public class Main {
                 case 5:
                     Costs.showMenu();
                     break;
-                case 6:
-                    ConvertIntToWord.main();
-                    break;
                 default:
                     System.out.println("Wrong answer, please type again");
             }

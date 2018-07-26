@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public class ConvertIntToWord {
 
     private static String jednosci[] = {" ", " jeden", " dwa", " trzy", " cztery", " pięć", " sześć", " siedem", " osiem", " dziewięć"};
@@ -8,17 +6,13 @@ public class ConvertIntToWord {
     private static String setki[] = {"", " sto", " dwieście", " trzysta", " czterysta", " pięćset", " sześćset", " siedemset", " osiemset", " dziewięćset"};
     private static String x[] = {"", " tys.", " mln.", " mld.", " bln.", " bld."};
 
-    public static void main() {
+    public static String convert(int liczba) {
 
         String slownie = " ";
-        int liczba, koncowka;
+        int koncowka;
         int rzad = 0;
         int j = 0;
         boolean minus = false;
-
-        System.out.print("Type number: ");
-        Scanner reading = new Scanner(System.in);
-        liczba = reading.nextInt();
 
         if (liczba < 0) {
             minus = true;
@@ -49,6 +43,6 @@ public class ConvertIntToWord {
 
         if (minus) slownie = "minus" + slownie;
 
-        System.out.println("Odpowiedz: " + slownie);
+        return slownie.trim();
     }
 }

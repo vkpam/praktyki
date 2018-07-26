@@ -27,6 +27,9 @@ public class Invoices {
                 case 6:
                     deleteProductsFromInvoiceAndInvoice();
                     break;
+                case 7:
+                    SaveInvoiceToFile.save();
+                    break;
                 default:
                     System.out.println("Wrong answer, please type again");
             }
@@ -36,7 +39,7 @@ public class Invoices {
 
     private static int showMenuAndGetAnswer() {
         Scanner reading = new Scanner(System.in);
-        System.out.println("\nINVOICES MENU\n 1.Add invoice\n 2.Mark invoice as paid\n 3.Show all invoices\n 4.Show invoices by month\n 5.Show unpaid invoices\n 6.Delete invoice\n 0.Main menu");
+        System.out.println("\nINVOICES MENU\n 1.Add invoice\n 2.Mark invoice as paid\n 3.Show all invoices\n 4.Show invoices by month\n 5.Show unpaid invoices\n 6.Delete invoice\n 7.Save invoice to file\n 0.Main menu");
         System.out.print("Choose an option: ");
         try {
             return reading.nextInt();
@@ -106,7 +109,7 @@ public class Invoices {
     }
 
     private static void markInvoiceAsPaid() {
-        showAll();
+        showUnpaidInvoices();
         System.out.print("Type invoice number to mark paid: ");
         Scanner reading = new Scanner(System.in);
         String invoiceNumber = reading.nextLine();
@@ -177,7 +180,7 @@ public class Invoices {
         showFunction(query);
     }
 
-    private static void showAll() {
+    public static void showAll() {
         showFunction("SELECT * FROM invoices WHERE selldate >= '" + TimeUtils.getBeginningOfTheYear() + "';");
     }
 
