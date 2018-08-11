@@ -1,5 +1,10 @@
-<html>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+		"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
+		<title></title>
 		<style type="text/css">
 			h1,p{font-family: 'Lucida Sans Unicode'}
 			table{font-family: 'Arial';}
@@ -12,77 +17,78 @@
 			text-align: right;
 			color: grey;
 			font-weight: bold;
-			font-size:11;
+			font-size: 11px;
 			}
 			.leftAlign{
 			text-align: left;
-			font-size:11;
-			padding-left:2px;
+			font-size: 11px;
+			padding-left: 2px;
+			white-space: nowrap;
 			}
 		</style>
 	</head>
 <body style="margin-left:30px">
 	<p style="font-size:30px; font-weight:bold; padding-left:30px; color: #3DA5FF;"><strong>Faktura</strong></p>
-	<p style="font-size:12;padding-left:30px; margin-top:-30px">Nr {numer faktury}</p>
+	<p style="font-size:12px; padding-left:30px; margin-top:-30px">Nr {numer faktury}</p>
 	<table align="center" style="margin-top: 40px; margin-bottom: 20px;">
 		<tbody>
 			<tr>
 				<td class="rightAlign">SPRZEDAWCA:</td>
-				<td class="leftAlign" nowrap="nowrap">Dawid Wawryka Usługi IT</td>
+				<td class="leftAlign">Dawid Wawryka Usługi IT</td>
 				<td class="rightAlign" style="padding-left:60px">NABYWCA:</td>
-				<td class="leftAlign" nowrap="nowrap">{NABYWCA}</td>
+				<td class="leftAlign">{NABYWCA}</td>
 			</tr>
 			<tr>
 				<td class="rightAlign">ADRES:</td>
-				<td class="leftAlign" nowrap="nowrap">ul.Kościuszki 72/10, 32-800 Brzesko</td>
+				<td class="leftAlign">ul.Kościuszki 72/10, 32-800 Brzesko</td>
 				<td class="rightAlign">ADRES:</td>
-				<td class="leftAlign" nowrap="nowrap">{ADRES}</td>
+				<td class="leftAlign">{ADRES}</td>
 			</tr>
 			<tr>
 				<td class="rightAlign">NIP:</td>
-				<td class="leftAlign"nowrap="nowrap">8691900399</td>
+				<td class="leftAlign">8691900399</td>
 				<td class="rightAlign">NIP:</td>
-				<td class="leftAlign"nowrap="nowrap">{NIP}</td>
+				<td class="leftAlign">{NIP}</td>
 			</tr>
 			<tr>
 				<td class="rightAlign">TELEFON:</td>
-				<td class="leftAlign"nowrap="nowrap">48 696643434</td>
+				<td class="leftAlign">48 696643434</td>
 				<td class="rightAlign">TELEFON:</td>
-				<td class="leftAlign"nowrap="nowrap">{TELEFON}</td>
+				<td class="leftAlign">{TELEFON}</td>
 			</tr>
 		</tbody>
 	</table>
-	<hr width="90%" color="#3DA5FF"/>
+	<hr style="width:90%" color="#3DA5FF"/>
 	<table align="center" style="margin-top: 20px;margin-bottom: 20px;">
 		<tbody>
 			<tr>
 				<td class="rightAlign">DATA WYSTAWIENIA:</td>
-				<td class="leftAlign" nowrap="nowrap">{DATA WYST.}</td>
+				<td class="leftAlign">{DATA WYST.}</td>
 				<td class="rightAlign" style="padding-left:60px">SPOSÓB PŁATNOŚCI:</td>
-				<td class="leftAlign" nowrap="nowrap">{SPOSOB}</td>
+				<td class="leftAlign">{SPOSOB}</td>
 			</tr>
 			<tr>
 				<td class="rightAlign">DATA SPRZEDAŻY:</td>
-				<td class="leftAlign"nowrap="nowrap">{DATA SPRZ.}</td>
+				<td class="leftAlign">{DATA SPRZ.}</td>
 				<td class="rightAlign">WALUTA:</td>
-				<td class="leftAlign" nowrap="nowrap">{WALUTA}</td>
+				<td class="leftAlign">{WALUTA}</td>
 			</tr>
 			<tr>
 				<td class="rightAlign">TERMIN PŁATNOŚCI:</td>
-				<td class="leftAlign" nowrap="nowrap">{TERMIN}</td>
+				<td class="leftAlign">{TERMIN}</td>
 				<td class="rightAlign">BANK:</td>
-				<td class="leftAlign" nowrap="nowrap">{BANK}</td>
+				<td class="leftAlign">{BANK}</td>
 			</tr>
 			<tr>
 				<td class="rightAlign"></td>
 				<td class="leftAlign"></td>
 				<td class="rightAlign">NUMER KONTA:</td>
-				<td class="leftAlign"nowrap="nowrap">{NUMER KONTA}</td>
+				<td class="leftAlign">{NUMER KONTA}</td>
 			</tr>
 		</tbody>
 	</table>
-	<hr width="90%" color="#3DA5FF"/>
-	<table align='center'; border="1" style="text-align: center; border-width: 3px; border-style: outset; border-color: #99CCFF; font-size: 11; width: 90%;">
+	<hr style="width:90%" color="#3DA5FF"/>
+	<table align='center' border="1" style="text-align: center; border-width: 3px; border-style: outset; border-color: #99CCFF; font-size: 11px; width: 90%;">
 		<tbody>
 			<tr style="background-color: #99CCFF; font-weight:bold">
 				<td>Lp.</td>
@@ -101,15 +107,15 @@
 				<td style="text-align: left;">{nazwa}</td>
 				<td>{ilosc}</td>
 				<td>{Jm}</td>
-				<td nowrap="nowrap">{cena netto}</td>
-				<td nowrap="nowrap">{wartosc netto}</td>
+				<td style="white-space: nowrap">{cena netto}</td>
+				<td style="white-space: nowrap">{wartosc netto}</td>
 				<td>{vat}</td>
-				<td nowrap="nowrap">{kwota vat}</td>
-				<td nowrap="nowrap">{wartosc brutto}</td>
+				<td style="white-space: nowrap">{kwota vat}</td>
+				<td style="white-space: nowrap">{wartosc brutto}</td>
 			</tr>
 			<!--SEPARATOR-->
 			<tr>
-			<td style="background-color: #3DA5FF; padding-left:10px; padding-right:10px; color:white; text-align:center; font-size: 18; height: 60px" colspan="4" rowspan="2" nowrap="nowrap">RAZEM DO ZAPŁATY: <strong></br>{razem do zaplaty} PLN</strong></td>
+			<td style="background-color: #3DA5FF; padding-left:10px; padding-right:10px; color:white; text-align:center; font-size: 18px; height: 60px; white-space: nowrap" colspan="4" rowspan="2">RAZEM DO ZAPŁATY: <strong><br/>{razem do zaplaty} PLN</strong></td>
 			<td class="RazemWPLN"><strong>Razem:</strong></td>
 			<td class="RazemWPLN">{suma netto}</td>
 			<td class="RazemWPLN">X</td>
@@ -126,10 +132,10 @@
 		</tbody>
 	</table>
 	
-	<table style="font-size: 11; margin-top: 30px; width: 90%; margin-left:30px">
+	<table style="font-size: 11px; margin-top: 30px; width: 90%; margin-left:30px">
 		<tr>
 			<td><strong>Zapłacono:</strong> 0,00 PLN</td>
-			<td rowspan="2" style="border-width: 1px; border-style: outset; border-color: #0000CC; font-size:10px; margin-right:40px">Tabela kursów średnich NBP nr 201/A/NBP/2017 </br>z dnia 2017-10-17.</br> Kurs
+			<td rowspan="3" style="border-width: 1px; border-style: outset; border-color: #0000CC; font-size:10px; margin-right:40px">Tabela kursów średnich NBP nr 201/A/NBP/2017 <br/>z dnia 2017-10-17.<br/> Kurs
 waluty USD: 3,5964</td>
 			</tr>
 			<tr>
@@ -139,8 +145,8 @@ waluty USD: 3,5964</td>
 		<td><strong>Slownie: </strong> {slownie}</td>
 		</tr>
 	</table>
-	<hr width="90%" color="#3DA5FF" />
-	<table style="margin-left: 30px; font-size: 11; margin-top: 20px; width: 90%">
+	<hr style="width: 90%" color="#3DA5FF" />
+	<table style="margin-left: 30px; font-size: 11px; margin-top: 20px; width: 90%">
 		<tr>
 			<td>Uwagi:</td>
 			</tr>
@@ -148,12 +154,12 @@ waluty USD: 3,5964</td>
 			<td>...</td>
 		</tr>
 	</table>
-	<hr width="90%" color="#3DA5FF" style="margin-top: 10px"/>
-	<table align='center' border="10px" frame="void" style="height: 130px; font-size: 9; width: 85%; color: grey; border-color: #99CCFF; margin-top:50px">
+	<hr color="#3DA5FF" style="width: 90%; margin-top: 10px"/>
+	<table align='center' border="10px" frame="void" style="height: 130px; font-size: 9px; width: 85%; color: grey; border-color: #99CCFF; margin-top:50px">
 		<tr>
 				<td valign="bottom" style="padding-bottom:12px; text-align: center">imię, nazwisko i podpis osoby upoważnionej do odebrania dokumentu</td>
-				<td valign="bottom" style="padding-bottom:12px; text-align: center" ><span style="font-size: 16px; color: black"><strong>Dawid Wawryka</strong></span></br></br>imię, nazwisko i podpis osoby upoważnionej do wystawienia dokumentu</td>
+				<td valign="bottom" style="padding-bottom:12px; text-align: center"><span style="font-size: 16px; color: black"><strong>Dawid Wawryka</strong></span><br/><br/>imię, nazwisko i podpis osoby upoważnionej do wystawienia dokumentu</td>
 		</tr>
 	</table>
 </body>
-<html>
+</html>
