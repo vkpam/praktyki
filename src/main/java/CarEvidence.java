@@ -55,6 +55,9 @@ public class CarEvidence {
         String date;
         System.out.print("Date (yyyy-mm-dd): ");
         date = reading.nextLine();
+        if (date.isEmpty()) {
+            date = TimeUtils.getTodaysDate();
+        }
         int distance;
         System.out.print("Distance: ");
         try {
@@ -91,6 +94,9 @@ public class CarEvidence {
             for (int i = 1; i <= carEvidenceCount; i++) {
                 System.out.print("Date " + i + " (yyyy-mm-dd): ");
                 date = reading.nextLine();
+                if (date.isEmpty()) {
+                    date = TimeUtils.getTodaysDate();
+                }
                 String query = "INSERT INTO carevidence VALUES(null, '"
                         + source + "','" + destination + "','" + goal + "','" + date + "'," + distance + ");";
                 Database.sendQueryToDB(query);
@@ -116,6 +122,8 @@ public class CarEvidence {
     }
 
     private static void showCarEvidenceFunction(ResultSet result, int evidenceCount) {
+        int totalDistance = 0;
+
         try {
             String[][] outputArray = new String[evidenceCount + 1][6];
             outputArray[0][0] = " EVIDENCE ID ";
@@ -132,11 +140,18 @@ public class CarEvidence {
                 outputArray[i][2] = " " + result.getString("DESTINATION") + " ";
                 outputArray[i][3] = " " + result.getString("GOAL") + " ";
                 outputArray[i][4] = " " + result.getString("DATE") + " ";
-                outputArray[i][5] = " " + result.getString("DISTANCE") + " ";
+                int distance = result.getInt("DISTANCE");
+                totalDistance += distance;
+                outputArray[i][5] = " " + distance + " ";
                 ++i;
             }
 
             Printer.printOutput(outputArray);
+
+            System.out.println("Total distance :          " + totalDistance);
+            double plnPerKm = Configuration.getDoubleParameter("plnperkm");
+            // Round to 2 decimal digits, e.g. 100.50 instead of 100.499999
+            System.out.format("Total car costs limit :   %.2f %n", totalDistance * plnPerKm);
 
         } catch (SQLException e) {
             System.out.println("ERROR: Couldn't fetch car evidence from the database: " + e.toString());
@@ -145,10 +160,11 @@ public class CarEvidence {
 
     private static void showAllCarEvidence() {
         try {
-            String query = "SELECT * FROM carevidence;";
+            String querySuffix = "FROM carevidence WHERE date >= '" + TimeUtils.getBeginningOfTheYear() + "';";
+            String query = "SELECT * " + querySuffix;
             ResultSet result = Database.select(query);
-            query = "SELECT count(*) FROM carevidence;";
-            int evidenceCount = getEvidenceCountHelper(query);
+            query = "SELECT count(*) " + querySuffix;
+            int evidenceCount = Database.getCountHelper(query);
             showCarEvidenceFunction(result, evidenceCount);
         } catch (SQLException e) {
             System.out.println("ERROR: Couldn't show all car evidence: " + e.toString());
@@ -167,16 +183,10 @@ public class CarEvidence {
         try {
             ResultSet result = Database.select(query);
             query = "SELECT count(*) FROM carevidence WHERE date > '" + begin + "' AND date < '" + end + "';";
-            int evidenceCountByMonth = getEvidenceCountHelper(query);
+            int evidenceCountByMonth = Database.getCountHelper(query);
             showCarEvidenceFunction(result, evidenceCountByMonth);
         } catch (SQLException e) {
             System.out.println("ERROR: Couldn't fetch car evidence in month from the database: " + e.toString());
         }
-    }
-
-    private static int getEvidenceCountHelper(String query) throws SQLException {
-        ResultSet result = Database.select(query);
-        result.next();
-        return result.getInt(1);
     }
 }

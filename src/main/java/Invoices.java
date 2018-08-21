@@ -1,7 +1,5 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -15,13 +13,22 @@ public class Invoices {
                     add();
                     break;
                 case 2:
-                    showAll();
+                    markInvoiceAsPaid();
                     break;
                 case 3:
-                    showByMonth();
+                    showAll();
                     break;
                 case 4:
+                    showByMonth();
+                    break;
+                case 5:
+                    showUnpaidInvoices();
+                    break;
+                case 6:
                     deleteProductsFromInvoiceAndInvoice();
+                    break;
+                case 7:
+                    SaveInvoiceToFile.save();
                     break;
                 default:
                     System.out.println("Wrong answer, please type again");
@@ -32,7 +39,7 @@ public class Invoices {
 
     private static int showMenuAndGetAnswer() {
         Scanner reading = new Scanner(System.in);
-        System.out.println("\nINVOICES MENU\n 1.Add invoice\n 2.Show all invoices\n 3.Show invoices by month\n 4.Delete invoice\n 0.Main menu");
+        System.out.println("\nINVOICES MENU\n 1.Add invoice\n 2.Mark invoice as paid\n 3.Show all invoices\n 4.Show invoices by month\n 5.Show unpaid invoices\n 6.Delete invoice\n 7.Save invoice to file\n 0.Main menu");
         System.out.print("Choose an option: ");
         try {
             return reading.nextInt();
@@ -55,20 +62,20 @@ public class Invoices {
             String createdate;
             System.out.print("Creation date (YYYY-MM-DD): ");
             createdate = reading.nextLine();
-            if(createdate.isEmpty()) {
-                createdate = getLocalDate();
+            if (createdate.isEmpty()) {
+                createdate = TimeUtils.getTodaysDate();
             }
             String selldate;
             System.out.print("Sell date (YYYY-MM-DD): ");
             selldate = reading.nextLine();
-            if(selldate.isEmpty()) {
-                selldate = getLocalDate();
+            if (selldate.isEmpty()) {
+                selldate = TimeUtils.getTodaysDate();
             }
             String paymentdate;
             System.out.print("Payment date (YYYY-MM-DD): ");
             paymentdate = reading.nextLine();
-            if(paymentdate.isEmpty()) {
-                paymentdate = getLocalDate();
+            if (paymentdate.isEmpty()) {
+                paymentdate = TimeUtils.getTodaysDate();
             }
             String payment;
             System.out.print("Payment type: ");
@@ -85,10 +92,11 @@ public class Invoices {
             String comments;
             System.out.print("Comments: ");
             comments = reading.nextLine();
+            int paid = 0;
 
             String query = "INSERT INTO invoices VALUES(null, '"
                     + number + "'," + customerid + ",'" + createdate + "','" + selldate + "','" + paymentdate + "','"
-                    + payment + "','" + bankname + "','" + accountnr + "','" + currency + "','" + comments + "');";
+                    + payment + "','" + bankname + "','" + accountnr + "','" + currency + "','" + comments + "'," + paid + ");";
 
             Database.sendQueryToDB(query);
             System.out.println("Invoice added");
@@ -97,6 +105,20 @@ public class Invoices {
 
         } catch (SQLException | InputMismatchException e) {
             System.out.println("ERROR: Couldn't add invoice: " + e.toString());
+        }
+    }
+
+    private static void markInvoiceAsPaid() {
+        showUnpaidInvoices();
+        System.out.print("Type invoice number to mark paid: ");
+        Scanner reading = new Scanner(System.in);
+        String invoiceNumber = reading.nextLine();
+        try {
+            String query = "UPDATE INVOICES SET PAID = 1 WHERE number = '" + invoiceNumber + "';";
+            Database.sendQueryToDB(query);
+            System.out.println("Invoice number " + invoiceNumber + " has been paid");
+        } catch (SQLException e) {
+            System.out.println("Couldn't mark invoice paid: " + e.toString());
         }
     }
 
@@ -159,7 +181,11 @@ public class Invoices {
     }
 
     public static void showAll() {
-        showFunction("SELECT * FROM invoices;");
+        showFunction("SELECT * FROM invoices WHERE selldate >= '" + TimeUtils.getBeginningOfTheYear() + "';");
+    }
+
+    private static void showUnpaidInvoices() {
+        showFunction("SELECT * FROM invoices WHERE paid = 0");
     }
 
     private static void showFunction(String query) {
@@ -185,6 +211,8 @@ public class Invoices {
                 System.out.println(" BANKNAME " + result.getString("BANKNAME") + "\t" +
                         " ACCOUNT NUMBER " + result.getString("ACCOUNTNR"));
                 System.out.println(" COMMENTS " + result.getString("COMMENTS"));
+                int paid = result.getInt("PAID");
+                System.out.println(" PAID " + (paid == 1 ? "YES" : "NO"));
 
                 showProducts(invoiceNumber);
                 ++alreadyShownInvoicesCount;
@@ -197,7 +225,8 @@ public class Invoices {
 
     private static void showProducts(String invoiceNumber) {
         try {
-            int productsCount = getProductsCount(invoiceNumber);
+            String countQuery = "SELECT count(*) FROM products WHERE invoicenumber = '" + invoiceNumber + "';";
+            int productsCount = Database.getCountHelper(countQuery);
             String[][] outputArray = new String[productsCount + 1][9];
             outputArray[0][0] = " ON. ";
             outputArray[0][1] = " NAME ";
@@ -239,13 +268,6 @@ public class Invoices {
         }
     }
 
-    private static int getProductsCount(String invoiceNumber) throws SQLException {
-        String query = "SELECT count(*) FROM products WHERE invoicenumber = '" + invoiceNumber + "';";
-        ResultSet result = Database.select(query);
-        result.next();
-        return result.getInt(1);
-    }
-
     private static void deleteProductsFromInvoiceAndInvoice() {
         showAll();
         System.out.print("\nType number (not ID) to delete: ");
@@ -263,15 +285,15 @@ public class Invoices {
     }
 
     private static String getLastInvoiceNumber() throws SQLException {
+        int invoicesCount = Database.getCountHelper("select count(*) from invoices;");
+        if (invoicesCount == 0) {
+            return "[NO INVOICES]";
+        }
         String query = "select number from invoices where invoiceid = (select max(invoiceid) from invoices);";
         ResultSet result = Database.select(query);
         result.next();
         return result.getString(1);
     }
-
-    private static String getLocalDate() {
-        LocalDate localDate1 = LocalDate.now();
-        String date = localDate1.format(DateTimeFormatter.ISO_LOCAL_DATE);
-        return date;
-    }
 }
+
+

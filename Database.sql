@@ -20,6 +20,7 @@ bankname text,
 accountnr text,
 currency text not null,
 comments text,
+paid integer,
 foreign key(customerid) references customers(customerid));
 
 create table products(
@@ -50,7 +51,14 @@ costid INTEGER PRIMARY KEY autoincrement,
 date DATE not null,
 description TEXT not null,
 netvalue INTEGER not null,
-vatvalue INTEGER not null);
+vatvalue INTEGER not null,
+
+CREATE TABLE otherincomes(
+otherincomeid integer primary key autoincrement,
+number text not null unique,
+description text not null,
+date date not null,
+value integer not null);
 
 insert into customers values(null,'Google LLC','Mountain View','0009-4532 Mountain View','2345615432','77898908723');
 insert into customers values(null,'Youtube','California 12','0098-7896 California','2345142634','6534534211');

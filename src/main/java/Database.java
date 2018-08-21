@@ -19,6 +19,12 @@ public class Database {
         return statement.executeQuery(sql);
     }
 
+    public static int getCountHelper(String query) throws SQLException {
+        ResultSet result = Database.select(query);
+        result.next();
+        return result.getInt(1);
+    }
+
     public static void disconnect() {
         try {
             if (conn != null) {
