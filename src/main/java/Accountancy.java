@@ -1,4 +1,4 @@
-import java.sql.SQLException;
+/*import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -148,4 +148,4 @@ public class Accountancy {
             System.out.println("ERROR: Couldn't fetch ZUS premiums from the database: " + e.toString());
         }
     }
-}
+}*/
