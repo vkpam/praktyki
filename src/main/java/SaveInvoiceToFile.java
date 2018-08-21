@@ -49,7 +49,7 @@ public class SaveInvoiceToFile {
         }
     }
 
-    private static List<Product> getProductsFromDatabase(String invoiceNumber) throws SQLException {
+    public static List<Product> getProductsFromDatabase(String invoiceNumber) throws SQLException {
 
         String query = "SELECT * FROM products WHERE invoicenumber = '" + invoiceNumber + "';";
         ResultSet result = Database.select(query);

@@ -1,0 +1,30 @@
+//To bedzie wnetrze metody
+//Uloz pytanie SQL, pisze z pamieci, wiec upewnij sie, ze nazwy kolumn/tabel sa dobre
+String query = "select invoiceNumber from invoices where selldate >= TimeUtils ..."
+
+//Suma podatkow vat
+int sum = 0;
+
+//Wyslij zapytanie do bazy danych. 
+//Teraz bedzie petla ktora przejdzie po kazdej linijce rezultatu (kazdej fakturze zwroconej przez powyzsze query)
+
+while(result.next()) {
+
+	String invoiceNumber = result.getString("invoiceNumber");
+	// to jest lista wszystkich produktow jakie sa na fakturze o danym numerze
+	List<Product> products = SaveInvoiceToFile.getProductsFromDatabase(invoiceNumber);
+	
+	//Teraz musisz zrobic petle po tych produktach.
+	//Dla przypomnienia: products to lista. metoda size() zwraca ilosc elementow wewnatrz niej.
+	//metoda get(i) zwraca element numer i
+	for(int i = 0; i < products.size(); ++i) {
+		Product p = products.get(i);
+		//Pamiêtasz, ¿e klasa Product ma metody jak getVatRate() i tym podobne?
+		//Wykorzystaj je do obliczenia vat
+		int vatValue = p.getNetPrice() * p.getCount() ...
+		sum += vatValue;
+	}
+}
+
+return sum;
+		
