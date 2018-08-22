@@ -30,7 +30,11 @@ public class Main {
                     break;
                 case 6:
                     System.out.println("Vat sum " + VatOperations.returnSum());
-                    System.out.println("Vat count " + VatOperations.vatCount();
+                    System.out.println("Vat count " + VatOperations.vatCount());
+                    System.out.println("Saved Vat " + VatOperations.savedVat());
+                    break;
+                case 7:
+                    Accountancy.showMenu();
                     break;
                 default:
                     System.out.println("Wrong answer, please type again");
@@ -43,7 +47,7 @@ public class Main {
 
     private static int showMenuAndGetAnswer() {
         Scanner reading = new Scanner(System.in);
-        System.out.println("\nMENU\n 1.Customers\n 2.Invoices\n 3.Other incomes\n 4.Car evidence\n 5.Costs\n 6.Vat Operations\n 0.Exit");
+        System.out.println("\nMENU\n 1.Customers\n 2.Invoices\n 3.Other incomes\n 4.Car evidence\n 5.Costs\n 6.Vat Operations\n 7.Accountancy\n 0.Exit");
         System.out.print("Choose an option: ");
         try {
             return reading.nextInt();

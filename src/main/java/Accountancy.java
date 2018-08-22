@@ -1,4 +1,4 @@
-/*import java.sql.SQLException;
+import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -11,14 +11,14 @@ public class Accountancy {
                     overview();
                     break;
                 case 2:
-                    incomeTax();
-                    break;
+                    vatStat();
+                    break;/*
                 case 3:
                     vatTax();
                     break;
                 case 4:
                     ZUSPremiums();
-                    break;
+                    break;*/
                 default:
                     System.out.println("Wrong answer, please type again");
             }
@@ -28,7 +28,7 @@ public class Accountancy {
 
     private static int showMenuAndGetAnswerCosts() {
         Scanner reading = new Scanner(System.in);
-        System.out.println("\nAccountancy MENU \n 1.Overview\n 2.Income TAX\n 3.VAT Tax\n 4.ZUS Premiums\n 0.Main menu");
+        System.out.println("\nAccountancy MENU \n 1.Overview\n 2.Oznacz VAT jako zapłacony \n 3.Income TAX\n 4.VAT Tax\n 5.ZUS Premiums\n 0.Main menu");
         System.out.print("Choose an option: ");
         try {
             return reading.nextInt();
@@ -38,12 +38,70 @@ public class Accountancy {
     }
 
     private static void overview() {
-        System.out.print("\tOVERVIEW");
-        System.out.print("Składki ZUS do zapłaty: " + "kwotaSkladekZus + \t STATUS:" + "statusSkladekZus");
-        System.out.print("Podatek dochodowy do zapłaty: + kwotaPodatkuDochodowego + \t STATUS: + statusPodatkuDochodowego");
-        System.out.print("Podatek VAT do zapłaty: + kwotaPodatkuVat + \t STATUS: + statusPodatkuVat");
+        System.out.println("\n\tOVERVIEW");
+        System.out.println("Składki ZUS do zapłaty: - " /*+ "kwotaSkladekZus + \t STATUS:" + "statusSkladekZus"*/);
+        System.out.println("Podatek dochodowy do zapłaty: -" /*+ kwotaPodatkuDochodowego + \t STATUS: + statusPodatkuDochodowego"*/);
+        showVatToPay();
     }
 
+    private static void showVatToPay() {
+        String statusPodatkuVat;
+        try {
+            int vatToPay = VatOperations.vatCount() - VatOperations.returnSum() - VatOperations.savedVat();
+            vatToPay /= 100;
+            if (vatToPay <= 0) {
+                statusPodatkuVat = "ZAPŁACONO";
+            } else {
+                statusPodatkuVat = "NIEZAPŁACONO   " + "(płatne do 25 " + TimeUtils.getCurrentMonth() + ")";
+            }
+            System.out.println("Podatek VAT do zapłaty: " + vatToPay + "\t\t\t STATUS: " + statusPodatkuVat);
+        } catch (SQLException e) {
+            System.out.println("ERROR: Couldn't show vat operations: " + e.toString());
+        }
+    }
+
+    private static void vatStat() {
+        showVatToPay();
+        Scanner reading = new Scanner(System.in);
+
+        System.out.print("VAT Amount: ");
+        int amount = reading.nextInt();
+        System.out.print("Date (dd-mm-yyyy) : ");
+        reading = new Scanner(System.in);
+        String date = reading.nextLine();
+
+        if (date.isEmpty()) {
+            date = TimeUtils.getTodaysDate();
+        }
+
+        try {
+            String query = "INSERT INTO vatPayments values (null,'" + date + "'," + amount + ");";
+            Database.sendQueryToDB(query);
+        } catch (SQLException e) {
+            System.out.println("ERROR: Couldn't add paid VAT: " + e.toString());
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
     private static void incomeTax() {
         System.out.print("\tINCOME TAX");
         System.out.print("PRZYCHÓD: ");
@@ -146,6 +204,5 @@ public class Accountancy {
 
         } catch (SQLException e) {
             System.out.println("ERROR: Couldn't fetch ZUS premiums from the database: " + e.toString());
-        }
-    }
-}*/
+        }*/
+}

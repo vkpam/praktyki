@@ -149,7 +149,7 @@ public class Costs {
         return (int) (savedTax * incomeTaxRate);
     }
 
-    private static int getSavedVat(int isCarRelated, int vatValue) {
+    public static int getSavedVat(int isCarRelated, int vatValue) {
         int savedVat;
         if (isCarRelated == 0) {
             savedVat = vatValue;

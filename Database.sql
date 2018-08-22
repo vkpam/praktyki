@@ -52,6 +52,8 @@ date DATE not null,
 description TEXT not null,
 netvalue INTEGER not null,
 vatvalue INTEGER not null,
+iscarrelated INTEGER);
+
 
 CREATE TABLE otherincomes(
 otherincomeid integer primary key autoincrement,
